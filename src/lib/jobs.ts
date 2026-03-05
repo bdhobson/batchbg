@@ -1,0 +1,118 @@
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import fs from 'fs/promises';
+import pool from './db';
+
+const JOBS_DIR = process.env.JOBS_DIR || '/home/brian/batchbg-jobs';
+
+export type OutputType = 'white' | 'transparent' | 'custom';
+
+export interface Job {
+  id: string;
+  status: string;
+  output_type: OutputType;
+  output_color: string | null;
+  total_images: number;
+  completed_images: number;
+  failed_images: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface JobImage {
+  id: string;
+  job_id: string;
+  original_filename: string;
+  status: string;
+  replicate_id: string | null;
+  error_message: string | null;
+}
+
+export async function createJob(
+  outputType: OutputType,
+  outputColor: string | null
+): Promise<string> {
+  const jobId = uuidv4();
+  await pool.query(
+    `INSERT INTO jobs (id, status, output_type, output_color) VALUES ($1, 'queued', $2, $3)`,
+    [jobId, outputType, outputColor]
+  );
+  const jobDir = path.join(JOBS_DIR, jobId);
+  await fs.mkdir(jobDir, { recursive: true });
+  await fs.mkdir(path.join(jobDir, 'originals'), { recursive: true });
+  await fs.mkdir(path.join(jobDir, 'processed'), { recursive: true });
+  return jobId;
+}
+
+export async function addImageToJob(
+  jobId: string,
+  filename: string,
+  buffer: Buffer
+): Promise<string> {
+  const imageId = uuidv4();
+  await pool.query(
+    `INSERT INTO job_images (id, job_id, original_filename, status) VALUES ($1, $2, $3, 'pending')`,
+    [imageId, jobId, filename]
+  );
+  const originalPath = path.join(JOBS_DIR, jobId, 'originals', imageId + path.extname(filename));
+  await fs.writeFile(originalPath, buffer);
+  return imageId;
+}
+
+export async function finalizeJobUpload(jobId: string, totalImages: number) {
+  await pool.query(
+    `UPDATE jobs SET total_images = $1, status = 'processing', updated_at = NOW() WHERE id = $2`,
+    [totalImages, jobId]
+  );
+}
+
+export async function getJob(jobId: string): Promise<Job | null> {
+  const res = await pool.query(`SELECT * FROM jobs WHERE id = $1`, [jobId]);
+  return res.rows[0] || null;
+}
+
+export async function getJobImages(jobId: string): Promise<JobImage[]> {
+  const res = await pool.query(
+    `SELECT * FROM job_images WHERE job_id = $1 ORDER BY created_at`,
+    [jobId]
+  );
+  return res.rows;
+}
+
+export async function updateImageStatus(
+  imageId: string,
+  status: string,
+  replicateId?: string,
+  errorMessage?: string
+) {
+  await pool.query(
+    `UPDATE job_images SET status = $1, replicate_id = $2, error_message = $3, updated_at = NOW() WHERE id = $4`,
+    [status, replicateId || null, errorMessage || null, imageId]
+  );
+}
+
+export async function incrementJobCompleted(jobId: string, failed = false) {
+  if (failed) {
+    await pool.query(
+      `UPDATE jobs SET failed_images = failed_images + 1, updated_at = NOW() WHERE id = $1`,
+      [jobId]
+    );
+  } else {
+    await pool.query(
+      `UPDATE jobs SET completed_images = completed_images + 1, updated_at = NOW() WHERE id = $1`,
+      [jobId]
+    );
+  }
+  // Check if done
+  const res = await pool.query(
+    `SELECT total_images, completed_images, failed_images FROM jobs WHERE id = $1`,
+    [jobId]
+  );
+  const { total_images, completed_images, failed_images } = res.rows[0];
+  if (completed_images + failed_images >= total_images) {
+    await pool.query(
+      `UPDATE jobs SET status = 'completed', updated_at = NOW() WHERE id = $1`,
+      [jobId]
+    );
+  }
+}
