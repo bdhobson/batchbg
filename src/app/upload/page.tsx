@@ -1,18 +1,35 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
+import Link from 'next/link';
 
 type OutputType = 'white' | 'transparent' | 'custom';
 
+interface TrialStatus {
+  used: number;
+  limit: number;
+  remaining: number;
+  exhausted: boolean;
+}
+
 export default function UploadPage() {
   const router = useRouter();
+  const { isSignedIn } = useUser();
   const [files, setFiles] = useState<File[]>([]);
   const [outputType, setOutputType] = useState<OutputType>('white');
   const [customColor, setCustomColor] = useState('#ff0000');
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [trial, setTrial] = useState<TrialStatus | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      fetch('/api/trial').then((r) => r.json()).then(setTrial).catch(() => {});
+    }
+  }, [isSignedIn]);
 
   const addFiles = useCallback((newFiles: File[]) => {
     const valid = newFiles.filter((f) =>
@@ -54,6 +71,16 @@ export default function UploadPage() {
 
       const res = await fetch('/api/jobs', { method: 'POST', body: formData });
       const data = await res.json();
+
+      if (res.status === 402) {
+        if (data.error === 'free_trial_exhausted' || data.error === 'free_trial_would_exceed') {
+          // Refresh trial status
+          const t = await fetch('/api/trial').then((r) => r.json());
+          setTrial(t);
+          return;
+        }
+      }
+
       if (data.jobId) {
         router.push(`/processing/${data.jobId}`);
       } else {
@@ -66,20 +93,55 @@ export default function UploadPage() {
     }
   };
 
+  const trialExhausted = !isSignedIn && trial?.exhausted;
+
   return (
     <main className="min-h-screen bg-gray-950 text-white p-8">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">BatchBG</h1>
-        <p className="text-gray-400 mb-8">Remove backgrounds from product photos in bulk.</p>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold">BatchBG</h1>
+          {isSignedIn ? (
+            <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white">
+              Dashboard →
+            </Link>
+          ) : (
+            <Link href="/sign-in" className="text-sm text-gray-400 hover:text-white">
+              Sign in
+            </Link>
+          )}
+        </div>
+        <p className="text-gray-400 mb-6">Remove backgrounds from product photos in bulk.</p>
+
+        {/* Free trial banner */}
+        {!isSignedIn && trial && (
+          <div className={`rounded-lg px-4 py-3 mb-6 text-sm ${trial.exhausted ? 'bg-red-900/50 border border-red-700' : 'bg-blue-900/30 border border-blue-800'}`}>
+            {trial.exhausted ? (
+              <div>
+                <p className="font-medium text-red-300">Your 5 free images have been used.</p>
+                <p className="text-red-400 mt-1">
+                  <Link href="/sign-up" className="underline hover:text-red-200">Create a free account</Link> to get 1,000 images/month.
+                </p>
+              </div>
+            ) : (
+              <p className="text-blue-300">
+                Free trial: <span className="font-semibold">{trial.remaining} image{trial.remaining !== 1 ? 's' : ''} remaining</span> · <Link href="/sign-up" className="underline hover:text-blue-100">Sign up for more</Link>
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Drop zone */}
         <div
           onDrop={onDrop}
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
-          onClick={() => inputRef.current?.click()}
-          className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-colors ${
-            dragOver ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700 hover:border-gray-500'
+          onClick={() => !trialExhausted && inputRef.current?.click()}
+          className={`border-2 border-dashed rounded-xl p-12 text-center transition-colors ${
+            trialExhausted
+              ? 'border-gray-800 opacity-50 cursor-not-allowed'
+              : dragOver
+              ? 'border-blue-500 bg-blue-500/10 cursor-pointer'
+              : 'border-gray-700 hover:border-gray-500 cursor-pointer'
           }`}
         >
           <div className="text-5xl mb-4">📁</div>
@@ -103,7 +165,7 @@ export default function UploadPage() {
           </div>
         )}
 
-        {/* File list (first 10) */}
+        {/* File list */}
         {files.length > 0 && (
           <div className="mt-3 max-h-48 overflow-y-auto rounded-lg border border-gray-800 divide-y divide-gray-800">
             {files.slice(0, 20).map((f, i) => (
@@ -157,13 +219,30 @@ export default function UploadPage() {
         </div>
 
         {/* Process button */}
-        <button
-          onClick={handleProcess}
-          disabled={files.length === 0 || uploading}
-          className="mt-8 w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-semibold text-lg transition-colors"
-        >
-          {uploading ? 'Uploading…' : `Process ${files.length > 0 ? files.length + ' image' + (files.length !== 1 ? 's' : '') : ''}`}
-        </button>
+        {trialExhausted ? (
+          <div className="mt-8 space-y-3">
+            <Link
+              href="/sign-up"
+              className="block w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-lg text-center transition-colors"
+            >
+              Create free account to continue
+            </Link>
+            <Link
+              href="/sign-in"
+              className="block w-full py-3 rounded-xl border border-gray-700 text-gray-300 hover:border-gray-500 font-medium text-center transition-colors"
+            >
+              Already have an account? Sign in
+            </Link>
+          </div>
+        ) : (
+          <button
+            onClick={handleProcess}
+            disabled={files.length === 0 || uploading}
+            className="mt-8 w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-semibold text-lg transition-colors"
+          >
+            {uploading ? 'Uploading…' : `Process ${files.length > 0 ? files.length + ' image' + (files.length !== 1 ? 's' : '') : ''}`}
+          </button>
+        )}
       </div>
     </main>
   );

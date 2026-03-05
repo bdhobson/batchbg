@@ -17,6 +17,8 @@ export interface Job {
   failed_images: number;
   created_at: string;
   updated_at: string;
+  clerk_user_id?: string | null;
+  session_token?: string | null;
 }
 
 export interface JobImage {
@@ -115,4 +117,12 @@ export async function incrementJobCompleted(jobId: string, failed = false) {
       [jobId]
     );
   }
+}
+
+export async function getUserJobs(clerkUserId: string): Promise<Job[]> {
+  const res = await pool.query(
+    `SELECT * FROM jobs WHERE clerk_user_id = $1 ORDER BY created_at DESC LIMIT 50`,
+    [clerkUserId]
+  );
+  return res.rows;
 }
