@@ -99,7 +99,7 @@ export default function UploadPage() {
     <main className="min-h-screen bg-gray-950 text-white p-8">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-3xl font-bold">BatchBG</h1>
+          <h1 className="text-3xl font-bold">Backdrop</h1>
           {isSignedIn ? (
             <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white">
               Dashboard →

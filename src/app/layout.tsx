@@ -14,8 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BatchBG — Bulk Background Removal",
-  description: "Remove backgrounds from hundreds of product photos at once.",
+  title: "Backdrop — Bulk Background Removal",
+  description: "Remove backgrounds from hundreds of product photos at once. Flat monthly price, no credits.",
+  openGraph: {
+    title: "Backdrop — Bulk Background Removal",
+    description: "Remove backgrounds from hundreds of product photos at once.",
+    siteName: "Backdrop",
+  },
 };
 
 export default function RootLayout({

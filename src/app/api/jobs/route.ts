@@ -7,7 +7,7 @@ import {
   getSessionUsage,
   FREE_TRIAL_LIMIT,
 } from '@/lib/sessions';
-import { incrementUserUsage } from '@/lib/usage';
+import { incrementUserUsage, getUserUsage, getUserPlan } from '@/lib/usage';
 import pool from '@/lib/db';
 
 const SESSION_COOKIE = 'batchbg_session';
@@ -58,6 +58,39 @@ export async function POST(req: NextRequest) {
             message: `You have ${remaining} free image${remaining === 1 ? '' : 's'} remaining. Sign up to process more.`,
           },
           { status: 402 }
+        );
+      }
+    }
+
+    // Gate signed-in users by their plan limit
+    if (userId) {
+      const userPlan = await getUserPlan(userId);
+      const imagesUsed = await getUserUsage(userId);
+      const remaining = userPlan.imageLimit - imagesUsed;
+
+      if (imagesUsed >= userPlan.imageLimit) {
+        return NextResponse.json(
+          {
+            error: 'plan_limit_reached',
+            used: imagesUsed,
+            limit: userPlan.imageLimit,
+            plan: userPlan.planId,
+            message: `You've used all ${userPlan.imageLimit.toLocaleString()} images on your ${userPlan.name} plan this month. Upgrade to process more.`,
+          },
+          { status: 403 }
+        );
+      }
+
+      if (files.length > remaining) {
+        return NextResponse.json(
+          {
+            error: 'plan_limit_would_exceed',
+            used: imagesUsed,
+            limit: userPlan.imageLimit,
+            remaining,
+            message: `You only have ${remaining} image${remaining === 1 ? '' : 's'} remaining on your ${userPlan.name} plan this month.`,
+          },
+          { status: 403 }
         );
       }
     }

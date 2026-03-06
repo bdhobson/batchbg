@@ -1,31 +1,44 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { getUserJobs } from '@/lib/jobs';
-import { getUserUsage } from '@/lib/usage';
+import { getUserUsage, getUserPlan } from '@/lib/usage';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
+import DashboardClient from './DashboardClient';
 
-const MONTHLY_LIMIT = 1000;
-
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ upgraded?: string }>;
+}) {
   const { userId } = await auth();
   if (!userId) redirect('/sign-in');
 
-  const [jobs, imagesUsed] = await Promise.all([
+  const params = await searchParams;
+  const upgraded = params.upgraded === 'true';
+
+  const [jobs, imagesUsed, userPlan] = await Promise.all([
     getUserJobs(userId),
     getUserUsage(userId),
+    getUserPlan(userId),
   ]);
 
-  const usagePct = Math.min(100, Math.round((imagesUsed / MONTHLY_LIMIT) * 100));
+  const monthlyLimit = userPlan.imageLimit;
+  const usagePct = Math.min(100, Math.round((imagesUsed / monthlyLimit) * 100));
+  const isFreeTrial = userPlan.planId === 'free_trial';
+  const showUpgradeBanner = isFreeTrial && imagesUsed >= 3;
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-gray-900">
-          BatchBG
+          Backdrop
         </Link>
         <div className="flex items-center gap-4">
+          {!isFreeTrial && (
+            <ManageSubscriptionButton />
+          )}
           <Link
             href="/upload"
             className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -36,16 +49,54 @@ export default async function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-8 space-y-8">
+      <main className="max-w-4xl mx-auto px-6 py-8 space-y-6">
+        {/* Upgrade success message */}
+        {upgraded && (
+          <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 flex items-center gap-3">
+            <span className="text-2xl">🎉</span>
+            <div>
+              <p className="font-semibold text-green-900">
+                You&apos;re now on the {userPlan.name} plan!
+              </p>
+              <p className="text-sm text-green-700">
+                You can now process up to {monthlyLimit.toLocaleString()} images per month.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Upgrade banner for free trial users */}
+        {showUpgradeBanner && !upgraded && (
+          <div className="bg-blue-50 border border-blue-200 rounded-xl px-5 py-4 flex items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold text-blue-900">You&apos;re almost out of free images</p>
+              <p className="text-sm text-blue-700">
+                You&apos;ve used {imagesUsed} of {monthlyLimit} free images. Upgrade to keep processing.
+              </p>
+            </div>
+            <Link
+              href="/pricing"
+              className="shrink-0 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Upgrade →
+            </Link>
+          </div>
+        )}
+
         {/* Usage Card */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">Usage This Month</h2>
+          <div className="flex items-start justify-between mb-1">
+            <h2 className="text-lg font-semibold text-gray-900">Usage This Month</h2>
+            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+              {userPlan.name} plan
+            </span>
+          </div>
           <p className="text-sm text-gray-500 mb-4">
             {new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}
           </p>
           <div className="flex items-end justify-between mb-2">
             <span className="text-3xl font-bold text-gray-900">{imagesUsed.toLocaleString()}</span>
-            <span className="text-sm text-gray-500">{MONTHLY_LIMIT.toLocaleString()} included</span>
+            <span className="text-sm text-gray-500">{monthlyLimit.toLocaleString()} included</span>
           </div>
           <div className="w-full bg-gray-100 rounded-full h-3">
             <div
@@ -53,7 +104,14 @@ export default async function DashboardPage() {
               style={{ width: `${usagePct}%` }}
             />
           </div>
-          <p className="text-xs text-gray-400 mt-2">{imagesUsed} of {MONTHLY_LIMIT} images processed</p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs text-gray-400">{imagesUsed} of {monthlyLimit.toLocaleString()} images processed</p>
+            {isFreeTrial && (
+              <Link href="/pricing" className="text-xs text-blue-600 hover:underline">
+                Upgrade plan →
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Job History */}
@@ -141,6 +199,8 @@ export default async function DashboardPage() {
           )}
         </div>
       </main>
+
+      <DashboardClient />
     </div>
   );
 }
@@ -156,5 +216,21 @@ function StatusBadge({ status }: { status: string }) {
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status] ?? 'bg-gray-100 text-gray-600'}`}>
       {status}
     </span>
+  );
+}
+
+function ManageSubscriptionButton() {
+  return <ManageSubscriptionClientButton />;
+}
+
+function ManageSubscriptionClientButton() {
+  // This is rendered server-side — the actual interaction is in DashboardClient
+  return (
+    <button
+      id="manage-subscription-btn"
+      className="text-sm text-gray-600 hover:text-gray-900 border border-gray-200 px-3 py-1.5 rounded-lg hover:border-gray-300 transition-colors"
+    >
+      Manage subscription
+    </button>
   );
 }

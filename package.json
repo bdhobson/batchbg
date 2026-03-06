@@ -1,5 +1,5 @@
 {
-  "name": "batchbg",
+  "name": "backdrop",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.0.1",
+    "@stripe/stripe-js": "^8.9.0",
     "@tailwindcss/postcss": "^4.2.1",
     "archiver": "^7.0.1",
     "next": "15.2.2",
@@ -19,6 +20,7 @@
     "react-dom": "^19.0.0",
     "replicate": "^1.0.1",
     "sharp": "^0.33.5",
+    "stripe": "^20.4.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
