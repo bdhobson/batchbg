@@ -16,7 +16,7 @@ export const PLANS: Record<PlanId, Plan> = {
     name: 'Free Trial',
     price: 0,
     images: 5,
-    features: ['5 images lifetime', 'White & transparent output', 'ZIP download'],
+    features: ['5 images/month', 'White & transparent output', 'ZIP download'],
   },
   starter: {
     id: 'starter',

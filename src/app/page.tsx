@@ -32,7 +32,7 @@ const PLANS = [
     period: '/mo',
     images: '1,000 images/month',
     features: ['White & transparent bg', 'ZIP download', 'Job history (30 days)'],
-    cta: 'Start free trial',
+    cta: 'Get started',
     highlight: false,
     href: '/sign-up?plan=starter',
   },
@@ -42,7 +42,7 @@ const PLANS = [
     period: '/mo',
     images: '5,000 images/month',
     features: ['White & transparent bg', 'ZIP download', 'Job history (30 days)', 'Priority processing'],
-    cta: 'Start free trial',
+    cta: 'Get started',
     highlight: true,
     badge: 'Most popular',
     href: '/sign-up?plan=pro',
@@ -53,7 +53,7 @@ const PLANS = [
     period: '/mo',
     images: '50,000 images/month',
     features: ['White & transparent bg', 'ZIP download', 'Job history (30 days)', 'Priority processing', 'Dedicated support'],
-    cta: 'Start free trial',
+    cta: 'Get started',
     highlight: false,
     href: '/sign-up?plan=max',
   },
@@ -104,7 +104,7 @@ export default function LandingPage() {
         <section className="mx-auto max-w-5xl px-6 pt-36 pb-20 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-1.5 text-sm text-muted-foreground mb-8">
             <span className="h-2 w-2 rounded-full bg-primary" />
-            14-day free trial · no credit card required
+            5 free images/month · no credit card needed
           </div>
           <h1 className="text-5xl font-bold tracking-tight leading-tight sm:text-6xl md:text-7xl mb-6">
             Remove backgrounds from<br />
@@ -118,11 +118,11 @@ export default function LandingPage() {
               href="/sign-up"
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Start your free trial
+              Start for free
               <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link href="/new" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Or try 5 images → no account needed
+            <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              View pricing ↓
             </Link>
           </div>
 
@@ -211,7 +211,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-5xl">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Simple, flat pricing</h2>
-              <p className="text-muted-foreground text-lg">No credits. No per-image fees. 14-day free trial on every plan.</p>
+              <p className="text-muted-foreground text-lg">No credits. No per-image fees. 5 free images/month on every account.</p>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-3">
@@ -260,11 +260,15 @@ export default function LandingPage() {
                     {plan.cta}
                   </Link>
                   <p className={`text-xs text-center mt-3 ${plan.highlight ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
-                    14 days free · cancel anytime
+                    cancel anytime
                   </p>
                 </div>
               ))}
             </div>
+
+            <p className="text-center text-sm text-muted-foreground mt-8">
+              Not ready to commit? Sign up free — you get 5 images/month at no charge, no credit card needed.
+            </p>
           </div>
         </section>
 
@@ -292,10 +296,10 @@ export default function LandingPage() {
         <section className="border-t border-border py-24 px-6 text-center">
           <div className="mx-auto max-w-2xl">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              Start your free trial today
+              Start removing backgrounds today
             </h2>
             <p className="text-muted-foreground text-lg mb-10">
-              14 days free on any plan. No credit card required. Cancel anytime.
+              5 free images every month. No credit card required. Upgrade anytime.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

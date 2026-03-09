@@ -1,7 +1,14 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
+// Public routes that don't require auth
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/pricing(.*)',
+  '/api/webhooks/stripe(.*)',
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   // Redirect /upload to /new
@@ -9,7 +16,8 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL('/new', req.url));
   }
 
-  if (isProtectedRoute(req)) {
+  // All non-public routes require sign-in
+  if (!isPublicRoute(req)) {
     await auth.protect();
   }
 });

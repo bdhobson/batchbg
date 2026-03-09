@@ -37,7 +37,7 @@ export function UsageCard({ used, total, month, plan }: UsageCardProps) {
 
         <div className="mt-3 flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
-            {used} of {total} images processed
+            {used} of {total} free images used this month
           </span>
           <button className="flex items-center gap-1 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground">
             Upgrade plan

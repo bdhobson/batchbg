@@ -160,7 +160,7 @@ export default function PricingPage() {
         </div>
 
         <div className="mt-12 text-center text-sm text-gray-500">
-          <p>Want to try first? <Link href="/upload" className="text-blue-600 hover:underline">Process 5 images free</Link> — no credit card required.</p>
+          <p>Want to try first? <Link href="/upload" className="text-blue-600 hover:underline">Process 5 images free</Link>, no credit card required.</p>
         </div>
       </main>
     </div>

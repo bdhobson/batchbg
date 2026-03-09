@@ -3,42 +3,108 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Backdrop - Monochromatic Black & White Theme */
+/*
+  THEME OPTIONS — comment/uncomment the one you want:
+  1. LIGHT (active) — white bg, dark elements, monochromatic
+  2. WARM — off-white/cream bg, warm dark text
+  3. SLATE — cool blue-grey bg, modern SaaS look
+*/
+
+/* ============================================================
+   THEME 1: LIGHT — Clean white, dark buttons (ACTIVE)
+   ============================================================ 
 :root {
-  --background: oklch(0.07 0 0);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.12 0 0);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.12 0 0);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(1 0 0);
-  --primary-foreground: oklch(0.07 0 0);
-  --secondary: oklch(0.18 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.6 0 0);
-  --accent: oklch(0.22 0 0);
-  --accent-foreground: oklch(0.98 0 0);
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.09 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.09 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.09 0 0);
+  --primary: oklch(0.09 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.09 0 0);
+  --muted: oklch(0.94 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.90 0 0);
+  --accent-foreground: oklch(0.09 0 0);
   --destructive: oklch(0.55 0.2 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.22 0 0);
-  --input: oklch(0.18 0 0);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.94 0 0);
   --ring: oklch(0.5 0 0);
-  --chart-1: oklch(0.98 0 0);
-  --chart-2: oklch(0.7 0 0);
-  --chart-3: oklch(0.5 0 0);
-  --chart-4: oklch(0.35 0 0);
-  --chart-5: oklch(0.22 0 0);
+  --chart-1: oklch(0.09 0 0);
+  --chart-2: oklch(0.35 0 0);
+  --chart-3: oklch(0.55 0 0);
+  --chart-4: oklch(0.70 0 0);
+  --chart-5: oklch(0.88 0 0);
   --radius: 0.75rem;
-  --sidebar: oklch(0.1 0 0);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(1 0 0);
-  --sidebar-primary-foreground: oklch(0.07 0 0);
-  --sidebar-accent: oklch(0.18 0 0);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.22 0 0);
+  --sidebar: oklch(0.96 0 0);
+  --sidebar-foreground: oklch(0.09 0 0);
+  --sidebar-primary: oklch(0.09 0 0);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.91 0 0);
+  --sidebar-accent-foreground: oklch(0.09 0 0);
+  --sidebar-border: oklch(0.88 0 0);
   --sidebar-ring: oklch(0.5 0 0);
 }
+
+/* ============================================================
+   THEME 2: WARM — Cream/off-white bg, warm dark text
+   Swap the :root block above with this to try it:
+
+
+:root {
+  --background: oklch(0.97 0.008 80);
+  --foreground: oklch(0.12 0.01 60);
+  --card: oklch(0.99 0.005 80);
+  --card-foreground: oklch(0.12 0.01 60);
+  --popover: oklch(0.99 0.005 80);
+  --popover-foreground: oklch(0.12 0.01 60);
+  --primary: oklch(0.15 0.01 60);
+  --primary-foreground: oklch(0.97 0.008 80);
+  --secondary: oklch(0.91 0.01 80);
+  --secondary-foreground: oklch(0.12 0.01 60);
+  --muted: oklch(0.91 0.01 80);
+  --muted-foreground: oklch(0.48 0.01 60);
+  --accent: oklch(0.87 0.015 80);
+  --accent-foreground: oklch(0.12 0.01 60);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.97 0.008 80);
+  --border: oklch(0.85 0.012 80);
+  --input: oklch(0.91 0.01 80);
+  --ring: oklch(0.5 0.01 60);
+  --radius: 0.75rem;
+}
+/*   ============================================================ */
+
+/* ============================================================
+   THEME 3: SLATE — Cool blue-grey, modern SaaS
+   Swap the :root block above with this to try it:
+*/
+:root {
+  --background: oklch(0.97 0.005 240);
+  --foreground: oklch(0.1 0.02 240);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.1 0.02 240);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.1 0.02 240);
+  --primary: oklch(0.45 0.18 240);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.92 0.008 240);
+  --secondary-foreground: oklch(0.1 0.02 240);
+  --muted: oklch(0.92 0.008 240);
+  --muted-foreground: oklch(0.48 0.02 240);
+  --accent: oklch(0.88 0.012 240);
+  --accent-foreground: oklch(0.1 0.02 240);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.87 0.01 240);
+  --input: oklch(0.92 0.008 240);
+  --ring: oklch(0.45 0.18 240);
+  --radius: 0.75rem;
+}
+/*   ============================================================ */
 
 .dark {
   --background: oklch(0.07 0 0);
@@ -60,11 +126,6 @@
   --border: oklch(0.22 0 0);
   --input: oklch(0.18 0 0);
   --ring: oklch(0.5 0 0);
-  --chart-1: oklch(0.98 0 0);
-  --chart-2: oklch(0.7 0 0);
-  --chart-3: oklch(0.5 0 0);
-  --chart-4: oklch(0.35 0 0);
-  --chart-5: oklch(0.22 0 0);
   --sidebar: oklch(0.1 0 0);
   --sidebar-foreground: oklch(0.98 0 0);
   --sidebar-primary: oklch(1 0 0);
@@ -76,8 +137,8 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -116,11 +177,12 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+* {
+  border-color: var(--border);
+  outline-color: var(--ring);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
 }
