@@ -102,10 +102,6 @@ export default function LandingPage() {
       <main>
         {/* Hero */}
         <section className="mx-auto max-w-5xl px-6 pt-36 pb-20 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-1.5 text-sm text-muted-foreground mb-8">
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            5 free images/month · no credit card needed
-          </div>
           <h1 className="text-5xl font-bold tracking-tight leading-tight sm:text-6xl md:text-7xl mb-6">
             Remove backgrounds from<br />
             <span className="text-muted-foreground">hundreds of product photos.</span>
@@ -308,9 +304,6 @@ export default function LandingPage() {
               >
                 Try Backdrop free
                 <ArrowRight className="h-5 w-5" />
-              </Link>
-              <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                View pricing ↓
               </Link>
             </div>
           </div>
