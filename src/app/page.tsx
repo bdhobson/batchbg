@@ -117,9 +117,6 @@ export default function LandingPage() {
               Start for free
               <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              View pricing ↓
-            </Link>
           </div>
 
           {/* Stats */}
