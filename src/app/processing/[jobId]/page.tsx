@@ -1,7 +1,9 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
+import { CheckCircle2, XCircle, Loader2, Download, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ImageData {
   id: string;
@@ -35,10 +37,7 @@ export default function ProcessingPage({
     const poll = async () => {
       try {
         const res = await fetch(`/api/jobs/${jobId}`);
-        if (!res.ok) {
-          setError('Job not found');
-          return;
-        }
+        if (!res.ok) { setError('Job not found'); return; }
         const data = await res.json();
         setJob(data);
       } catch {
@@ -49,9 +48,7 @@ export default function ProcessingPage({
     poll();
     const interval = setInterval(() => {
       setJob((prev) => {
-        if (prev?.status === 'completed') {
-          clearInterval(interval);
-        }
+        if (prev?.status === 'completed') clearInterval(interval);
         return prev;
       });
       poll();
@@ -62,22 +59,24 @@ export default function ProcessingPage({
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-400 text-xl">{error}</p>
+          <XCircle className="h-10 w-10 text-destructive mx-auto mb-3" />
+          <p className="text-foreground font-medium">{error}</p>
+          <Link href="/new" className="text-sm text-muted-foreground hover:text-foreground mt-2 inline-block">Start a new batch</Link>
         </div>
-      </main>
+      </div>
     );
   }
 
   if (!job) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin text-4xl mb-4">⚙️</div>
-          <p className="text-gray-400">Loading job…</p>
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground text-sm">Loading job...</p>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -88,91 +87,109 @@ export default function ProcessingPage({
   const isDone = job.status === 'completed';
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-background">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+              <span className="text-sm font-bold text-primary-foreground">B</span>
+            </div>
+            <span className="text-lg font-semibold tracking-tight text-foreground">Backdrop</span>
+          </Link>
+          <Link href="/dashboard">
+            <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" />
+              Dashboard
+            </Button>
+          </Link>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-6xl px-6 pt-24 pb-12">
+        <div className="flex items-start justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold">Processing Batch</h1>
-            <p className="text-gray-400 text-sm mt-1">Job {job.id.slice(0, 8)}…</p>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
+              {isDone ? 'Batch Complete' : 'Processing Batch'}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">Job {job.id.slice(0, 8)}...</p>
           </div>
           <div className="text-right">
-            <p className="text-xl font-semibold">
-              {job.completedImages + job.failedImages} / {job.totalImages}
+            <p className="text-2xl font-bold text-foreground">
+              {job.completedImages + job.failedImages}<span className="text-muted-foreground font-normal text-lg"> / {job.totalImages}</span>
             </p>
-            <p className="text-gray-400 text-sm">images done</p>
+            <p className="text-sm text-muted-foreground">images done</p>
           </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="w-full bg-gray-800 rounded-full h-3 mb-6">
-          <div
-            className="bg-blue-500 h-3 rounded-full transition-all duration-500"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="w-full bg-secondary rounded-full h-1.5 mb-6">
+          <div className="bg-primary h-1.5 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
         </div>
 
         {isDone && (
-          <div className="bg-green-900/40 border border-green-700 rounded-xl p-4 mb-6 text-center">
-            <p className="text-green-400 font-semibold text-lg">✅ All done!</p>
-            <p className="text-gray-400 text-sm mt-1">
-              {job.completedImages} processed · {job.failedImages} failed
-            </p>
+          <div className="rounded-xl border border-border bg-card p-5 mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="h-5 w-5 text-foreground" />
+              <div>
+                <p className="font-semibold text-card-foreground">All done</p>
+                <p className="text-sm text-muted-foreground">
+                  {job.completedImages} processed{job.failedImages > 0 ? ` · ${job.failedImages} failed` : ''}
+                </p>
+              </div>
+            </div>
+            <a href={`/api/jobs/${job.id}/download`}>
+              <Button className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                <Download className="h-4 w-4" />
+                Download ZIP
+              </Button>
+            </a>
           </div>
         )}
 
-        {/* Thumbnail grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {job.images.map((img) => (
-            <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden bg-gray-900 border border-gray-800 group">
-              {/* Show processed if done, else original */}
+            <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden bg-secondary border border-border group">
               <img
                 src={img.status === 'completed' && img.processedUrl ? img.processedUrl : img.originalUrl}
                 alt={img.filename}
                 className="w-full h-full object-cover"
               />
-
-              {/* Status overlay */}
               {img.status === 'pending' && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                 </div>
               )}
               {img.status === 'processing' && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+                <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+                  <Loader2 className="h-5 w-5 animate-spin text-foreground" />
                 </div>
               )}
               {img.status === 'completed' && (
-                <div className="absolute top-1 right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold">
-                  ✓
+                <div className="absolute top-1.5 right-1.5 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-primary-foreground" />
                 </div>
               )}
               {img.status === 'failed' && (
-                <div className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-xs">
-                  ✕
+                <div className="absolute top-1.5 right-1.5 w-6 h-6 bg-destructive rounded-full flex items-center justify-center">
+                  <XCircle className="h-3.5 w-3.5 text-destructive-foreground" />
                 </div>
               )}
-
-              {/* Filename tooltip */}
-              <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-xs p-1 truncate opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute bottom-0 left-0 right-0 bg-foreground/80 text-background text-xs px-2 py-1 truncate opacity-0 group-hover:opacity-100 transition-opacity">
                 {img.filename}
               </div>
-
-              {/* Download on hover for completed */}
               {img.status === 'completed' && img.processedUrl && (
                 <a
                   href={img.processedUrl}
                   download={img.filename.replace(/\.[^.]+$/, '') + '_no_bg.png'}
-                  className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/50 transition-colors opacity-0 group-hover:opacity-100"
+                  className="absolute inset-0 flex items-center justify-center bg-foreground/0 hover:bg-foreground/20 transition-colors opacity-0 group-hover:opacity-100"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <span className="text-white text-xs font-medium bg-black/60 px-2 py-1 rounded">Download</span>
+                  <span className="text-foreground text-xs font-medium bg-background/80 px-2 py-1 rounded-lg">Download</span>
                 </a>
               )}
             </div>
           ))}
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
