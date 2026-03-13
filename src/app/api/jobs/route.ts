@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createJob, addImageToJob, finalizeJobUpload } from '@/lib/jobs';
-import { processJob } from '@/lib/processor';
+import { submitImageToReplicate } from '@/lib/processor';
 import { auth } from '@clerk/nextjs/server';
 import { incrementUserUsage, getUserUsage, getUserPlan } from '@/lib/usage';
 import pool from '@/lib/db';
@@ -61,20 +61,16 @@ export async function POST(req: NextRequest) {
     }
 
     const jobId = await createJob(outputType as 'white' | 'transparent' | 'custom', outputColor);
-
     await pool.query('UPDATE jobs SET clerk_user_id = $1 WHERE id = $2', [userId, jobId]);
 
     for (const file of files) {
       const buffer = Buffer.from(await file.arrayBuffer());
-      await addImageToJob(jobId, file.name, buffer);
+      const imageId = await addImageToJob(jobId, file.name);
+      await submitImageToReplicate(imageId, file.name, buffer);
     }
 
     await finalizeJobUpload(jobId, files.length);
-
-    // Fire-and-forget processing
-    processJob(jobId).then(async () => {
-      await incrementUserUsage(userId, files.length);
-    }).catch((err) => console.error('Job processing error:', err));
+    await incrementUserUsage(userId, files.length);
 
     return NextResponse.json({ jobId });
   } catch (err) {

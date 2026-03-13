@@ -1,9 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
-import fs from 'fs/promises';
 import pool from './db';
-
-const JOBS_DIR = process.env.JOBS_DIR || '/home/brian/batchbg-jobs';
 
 export type OutputType = 'white' | 'transparent' | 'custom';
 
@@ -28,6 +24,7 @@ export interface JobImage {
   status: string;
   replicate_id: string | null;
   error_message: string | null;
+  processed_url: string | null;
 }
 
 export async function createJob(
@@ -39,26 +36,26 @@ export async function createJob(
     `INSERT INTO jobs (id, status, output_type, output_color) VALUES ($1, 'queued', $2, $3)`,
     [jobId, outputType, outputColor]
   );
-  const jobDir = path.join(JOBS_DIR, jobId);
-  await fs.mkdir(jobDir, { recursive: true });
-  await fs.mkdir(path.join(jobDir, 'originals'), { recursive: true });
-  await fs.mkdir(path.join(jobDir, 'processed'), { recursive: true });
   return jobId;
 }
 
 export async function addImageToJob(
   jobId: string,
-  filename: string,
-  buffer: Buffer
+  filename: string
 ): Promise<string> {
   const imageId = uuidv4();
   await pool.query(
     `INSERT INTO job_images (id, job_id, original_filename, status) VALUES ($1, $2, $3, 'pending')`,
     [imageId, jobId, filename]
   );
-  const originalPath = path.join(JOBS_DIR, jobId, 'originals', imageId + path.extname(filename));
-  await fs.writeFile(originalPath, buffer);
   return imageId;
+}
+
+export async function updateImageProcessedUrl(imageId: string, url: string) {
+  await pool.query(
+    `UPDATE job_images SET processed_url = $1, updated_at = NOW() WHERE id = $2`,
+    [url, imageId]
+  );
 }
 
 export async function finalizeJobUpload(jobId: string, totalImages: number) {
@@ -105,7 +102,6 @@ export async function incrementJobCompleted(jobId: string, failed = false) {
       [jobId]
     );
   }
-  // Check if done
   const res = await pool.query(
     `SELECT total_images, completed_images, failed_images FROM jobs WHERE id = $1`,
     [jobId]

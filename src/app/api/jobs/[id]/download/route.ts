@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getJob } from '@/lib/jobs';
+import { getJob, getJobImages } from '@/lib/jobs';
 import { auth } from '@clerk/nextjs/server';
 import archiver from 'archiver';
-import path from 'path';
-import fs from 'fs';
-
-const JOBS_DIR = process.env.JOBS_DIR || '/home/brian/batchbg-jobs';
-
-function isSafePath(base: string, target: string): boolean {
-  const resolved = path.resolve(target);
-  return resolved.startsWith(path.resolve(base) + path.sep) || resolved === path.resolve(base);
-}
 
 function isSafeSegment(segment: string): boolean {
   return /^[a-zA-Z0-9_-]+$/.test(segment);
@@ -43,34 +34,42 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
-  const processedDir = path.join(JOBS_DIR, id, 'processed');
+  const images = await getJobImages(id);
+  const completedImages = images.filter((img) => img.status === 'completed' && img.processed_url);
 
-  if (!isSafePath(JOBS_DIR, processedDir)) {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
-
-  if (!fs.existsSync(processedDir)) {
-    return NextResponse.json({ error: 'No processed images found' }, { status: 404 });
-  }
-
-  const files = fs.readdirSync(processedDir);
-  if (files.length === 0) {
+  if (completedImages.length === 0) {
     return NextResponse.json({ error: 'No processed images found' }, { status: 404 });
   }
 
   const shortId = id.replace(/-/g, '').slice(0, 8);
   const filename = `backdrop-${shortId}.zip`;
+  const token = process.env.BLOB_READ_WRITE_TOKEN!;
 
   const archive = archiver('zip', { zlib: { level: 6 } });
-  archive.directory(processedDir, false);
-  archive.finalize();
-
   const { readable, writable } = new TransformStream();
   const writer = writable.getWriter();
 
   archive.on('data', (chunk: Buffer) => { writer.write(chunk); });
   archive.on('end', () => { writer.close(); });
   archive.on('error', (err: Error) => { writer.abort(err); });
+
+  (async () => {
+    for (const img of completedImages) {
+      try {
+        const resp = await fetch(img.processed_url!, {
+          headers: { authorization: `Bearer ${token}` },
+        });
+        if (resp.ok) {
+          const buf = Buffer.from(await resp.arrayBuffer());
+          const outName = img.original_filename.replace(/\.[^.]+$/, '') + '.png';
+          archive.append(buf, { name: outName });
+        }
+      } catch (e) {
+        console.error(`Error fetching image ${img.id} for zip:`, e);
+      }
+    }
+    archive.finalize();
+  })();
 
   return new NextResponse(readable, {
     headers: {

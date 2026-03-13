@@ -1,40 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
-import fs from 'fs/promises';
-
-const JOBS_DIR = process.env.JOBS_DIR || '/home/brian/batchbg-jobs';
-
-function isSafePath(base: string, target: string): boolean {
-  const resolved = path.resolve(target);
-  return resolved.startsWith(path.resolve(base) + path.sep) || resolved === path.resolve(base);
-}
-
-function isSafeSegment(segment: string): boolean {
-  return /^[a-zA-Z0-9_-]+$/.test(segment);
-}
+import { getJob } from '@/lib/jobs';
+import pool from '@/lib/db';
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string; imageId: string }> }
 ) {
   const { id, imageId } = await params;
 
-  if (!isSafeSegment(id) || !isSafeSegment(imageId)) {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
-
-  const filePath = path.join(JOBS_DIR, id, 'processed', imageId + '.png');
-
-  if (!isSafePath(JOBS_DIR, filePath)) {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
-
-  try {
-    const buf = await fs.readFile(filePath);
-    return new NextResponse(buf, {
-      headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=3600' },
-    });
-  } catch {
+  const job = await getJob(id);
+  if (!job) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
+
+  const res = await pool.query(
+    `SELECT processed_url FROM job_images WHERE id = $1 AND job_id = $2 AND status = 'completed'`,
+    [imageId, id]
+  );
+  const row = res.rows[0];
+  if (!row?.processed_url) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+
+  const token = process.env.BLOB_READ_WRITE_TOKEN!;
+  const blobResp = await fetch(row.processed_url, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+
+  if (!blobResp.ok) {
+    return NextResponse.json({ error: 'Failed to fetch image' }, { status: 502 });
+  }
+
+  const buffer = Buffer.from(await blobResp.arrayBuffer());
+  return new NextResponse(buffer, {
+    headers: {
+      'Content-Type': 'image/png',
+      'Cache-Control': 'private, max-age=3600',
+    },
+  });
 }

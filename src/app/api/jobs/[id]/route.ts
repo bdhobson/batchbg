@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getJob, getJobImages } from '@/lib/jobs';
-import path from 'path';
-import fs from 'fs/promises';
-
-const JOBS_DIR = process.env.JOBS_DIR || '/home/brian/batchbg-jobs';
+import { checkAndFinalizeImage } from '@/lib/processor';
 
 export async function GET(
   _req: NextRequest,
@@ -15,26 +12,45 @@ export async function GET(
     return NextResponse.json({ error: 'Job not found' }, { status: 404 });
   }
 
+  // Check and finalize any in-progress images
   const images = await getJobImages(id);
+  const processingImages = images.filter(
+    (img) => img.status === 'processing' && img.replicate_id
+  );
 
-  // Build image status with thumbnail URLs
-  const imageData = images.map((img) => ({
+  await Promise.all(
+    processingImages.map((img) =>
+      checkAndFinalizeImage(
+        img.id,
+        img.replicate_id!,
+        job.output_type,
+        job.output_color
+      ).catch((err) => console.error(`Error finalizing image ${img.id}:`, err))
+    )
+  );
+
+  // Re-fetch after checks
+  const updatedImages = await getJobImages(id);
+  const updatedJob = await getJob(id);
+
+  const imageData = updatedImages.map((img) => ({
     id: img.id,
     filename: img.original_filename,
     status: img.status,
-    // Thumbnail URL for processed images
-    processedUrl: img.status === 'completed' ? `/api/jobs/${id}/image/${img.id}` : null,
-    originalUrl: `/api/jobs/${id}/original/${img.id}`,
+    // Proxy URL — image route fetches from blob storage server-side
+    processedUrl: img.status === 'completed' && img.processed_url
+      ? `/api/jobs/${id}/image/${img.id}`
+      : null,
   }));
 
   return NextResponse.json({
-    id: job.id,
-    status: job.status,
-    outputType: job.output_type,
-    totalImages: job.total_images,
-    completedImages: job.completed_images,
-    failedImages: job.failed_images,
-    createdAt: job.created_at,
+    id: updatedJob!.id,
+    status: updatedJob!.status,
+    outputType: updatedJob!.output_type,
+    totalImages: updatedJob!.total_images,
+    completedImages: updatedJob!.completed_images,
+    failedImages: updatedJob!.failed_images,
+    createdAt: updatedJob!.created_at,
     images: imageData,
   });
 }
