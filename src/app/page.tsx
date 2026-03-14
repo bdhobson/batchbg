@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { auth } from '@clerk/nextjs/server';
 import { ArrowRight, Upload, Zap, Download, CheckCircle, Star, Package } from 'lucide-react';
 
 const STATS = [
@@ -70,7 +71,8 @@ const TESTIMONIALS = [
   },
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const { userId } = await auth();
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -86,15 +88,23 @@ export default function LandingPage() {
             <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Pricing
             </Link>
-            <Link href="/sign-in" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Sign in
-            </Link>
-            <Link
-              href="/sign-up"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Try free
-            </Link>
+            {userId ? (
+              <Link href="/dashboard" className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors">
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link href="/sign-in" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                  Sign in
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
+                  Try free
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
