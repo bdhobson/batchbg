@@ -12,6 +12,26 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function submitWithRetry(dataUri: string, attempt = 1): Promise<string> {
+  try {
+    const prediction = await replicate.predictions.create({
+      version: '95fcc2a26d3899cd6c2691c900465aaeff466285a65c14638cc5f36f34befaf1',
+      input: { image: dataUri },
+    });
+    return prediction.id;
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    const is429 = msg.includes('429') || msg.includes('throttled') || msg.includes('rate limit') || msg.includes('ApiError');
+    if (is429 && attempt <= 3) {
+      await sleep(12000 * attempt);
+      return submitWithRetry(dataUri, attempt + 1);
+    }
+    throw err;
+  }
+}
+
 export async function submitImageToReplicate(
   imageId: string,
   filename: string,
@@ -22,14 +42,11 @@ export async function submitImageToReplicate(
   const base64 = buffer.toString('base64');
   const dataUri = `data:${mimeType};base64,${base64}`;
 
-  const prediction = await replicate.predictions.create({
-    version: '95fcc2a26d3899cd6c2691c900465aaeff466285a65c14638cc5f36f34befaf1',
-    input: { image: dataUri },
-  });
+  const predictionId = await submitWithRetry(dataUri);
 
   await pool.query(
     `UPDATE job_images SET replicate_id = $1, status = 'processing', updated_at = NOW() WHERE id = $2`,
-    [prediction.id, imageId]
+    [predictionId, imageId]
   );
 }
 

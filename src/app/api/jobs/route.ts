@@ -63,9 +63,11 @@ export async function POST(req: NextRequest) {
     const jobId = await createJob(outputType as 'white' | 'transparent' | 'custom', outputColor);
     await pool.query('UPDATE jobs SET clerk_user_id = $1 WHERE id = $2', [userId, jobId]);
 
-    for (const file of files) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
       const buffer = Buffer.from(await file.arrayBuffer());
       const imageId = await addImageToJob(jobId, file.name);
+      if (i > 0) await new Promise(r => setTimeout(r, 3000)); // 3s gap between submissions
       await submitImageToReplicate(imageId, file.name, buffer);
     }
 
