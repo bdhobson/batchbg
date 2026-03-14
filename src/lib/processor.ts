@@ -24,8 +24,12 @@ async function submitWithRetry(dataUri: string, attempt = 1): Promise<string> {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     const is429 = msg.includes('429') || msg.includes('throttled') || msg.includes('rate limit') || msg.includes('ApiError');
-    if (is429 && attempt <= 3) {
-      await sleep(12000 * attempt);
+    if (is429 && attempt <= 5) {
+      // Parse retry_after from error message if present, otherwise back off
+      const retryMatch = msg.match(/resets in ~(\d+)s/);
+      const waitMs = retryMatch ? (parseInt(retryMatch[1]) + 2) * 1000 : 15000;
+      console.log(`Replicate 429 on attempt ${attempt}, waiting ${waitMs}ms`);
+      await sleep(waitMs);
       return submitWithRetry(dataUri, attempt + 1);
     }
     throw err;
