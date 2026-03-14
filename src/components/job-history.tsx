@@ -96,7 +96,7 @@ export function JobHistory({ jobs }: JobHistoryProps) {
                     href={`/processing/${job.id}`}
                     className="text-xs font-medium text-muted-foreground hover:text-foreground"
                   >
-                    View →
+                    View
                   </Link>
                 )}
               </div>

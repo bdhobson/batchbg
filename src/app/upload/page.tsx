@@ -84,10 +84,10 @@ export default function UploadPage() {
       if (data.jobId) {
         router.push(`/processing/${data.jobId}`);
       } else {
-        alert('Error: ' + (data.error || 'Unknown error'));
+        console.error('Upload error:', data.error);
       }
     } catch (err) {
-      alert('Upload failed: ' + String(err));
+      console.error('Upload failed:', err);
     } finally {
       setUploading(false);
     }
@@ -102,7 +102,7 @@ export default function UploadPage() {
           <h1 className="text-3xl font-bold">Backdrop</h1>
           {isSignedIn ? (
             <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white">
-              Dashboard →
+              Dashboard
             </Link>
           ) : (
             <Link href="/sign-in" className="text-sm text-gray-400 hover:text-white">

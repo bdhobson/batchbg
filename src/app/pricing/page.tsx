@@ -92,7 +92,7 @@ export default function PricingPage() {
           Backdrop
         </Link>
         <Link href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">
-          Dashboard →
+          Dashboard
         </Link>
       </header>
 

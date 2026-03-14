@@ -81,7 +81,7 @@ export default async function DashboardPage({
               href="/pricing"
               className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Upgrade →
+              Upgrade
             </Link>
           </div>
         )}
