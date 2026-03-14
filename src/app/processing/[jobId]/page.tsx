@@ -98,7 +98,6 @@ export default function ProcessingPage({
           </Link>
           <Link href="/dashboard">
             <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4" />
               Dashboard
             </Button>
           </Link>

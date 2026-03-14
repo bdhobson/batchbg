@@ -12,7 +12,7 @@ const FEATURES = [
   {
     icon: Upload,
     title: 'Bulk upload',
-    desc: 'Drop an entire catalog at once — up to 500 images per batch. JPG, PNG, or WEBP.',
+    desc: 'Drop an entire catalog at once, up to 500 images per batch. JPG, PNG, or WEBP.',
   },
   {
     icon: Zap,
@@ -117,7 +117,7 @@ export default async function LandingPage() {
             <span className="text-muted-foreground">hundreds of product photos.</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Built for e-commerce sellers. Upload 500 photos, get clean white-background images back in minutes. Flat monthly pricing — no per-image fees.
+            Built for e-commerce sellers. Upload 500 photos, get clean white-background images back in minutes. Flat monthly pricing with no per-image fees.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
