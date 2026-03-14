@@ -25,6 +25,8 @@ export default function NewBatchPage() {
   const [customColor, setCustomColor] = useState("#ffffff")
   const [isProcessing, setIsProcessing] = useState(false)
   const [trial, setTrial] = useState<TrialStatus | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false)
 
   useEffect(() => {
     if (!isSignedIn) {
@@ -33,6 +35,12 @@ export default function NewBatchPage() {
   }, [isSignedIn])
 
   const trialExhausted = !isSignedIn && trial?.exhausted
+
+  const handleFilesChange = (newFiles: File[]) => {
+    setFiles(newFiles)
+    setErrorMessage(null)
+    setShowUpgradePrompt(false)
+  }
 
   const handleProcess = async () => {
     if (files.length === 0) return
@@ -46,21 +54,27 @@ export default function NewBatchPage() {
       const res = await fetch("/api/jobs", { method: "POST", body: formData })
       const data = await res.json()
 
-      if (res.status === 402) {
-        if (data.error === "free_trial_exhausted" || data.error === "free_trial_would_exceed") {
-          const t = await fetch("/api/trial").then((r) => r.json())
-          setTrial(t)
-          return
-        }
-      }
-
       if (data.jobId) {
         router.push(`/processing/${data.jobId}`)
-      } else {
-        alert("Error: " + (data.error || "Unknown error"))
+        return
       }
+
+      // Handle specific error cases with inline UI
+      if (data.error === "plan_limit_reached" || data.error === "plan_limit_would_exceed" ||
+          data.error === "free_trial_exhausted" || data.error === "free_trial_would_exceed") {
+        setShowUpgradePrompt(true)
+        return
+      }
+
+      if (data.error === "Sign in required") {
+        setErrorMessage("Please sign in to process images.")
+        return
+      }
+
+      setErrorMessage("Something went wrong. Please try again.")
     } catch (err) {
-      alert("Upload failed: " + String(err))
+      console.error(err)
+      setErrorMessage("Upload failed. Check your connection and try again.")
     } finally {
       setIsProcessing(false)
     }
@@ -97,7 +111,7 @@ export default function NewBatchPage() {
         )}
 
         <div className="space-y-8">
-          <Dropzone files={files} onFilesChange={setFiles} />
+          <Dropzone files={files} onFilesChange={handleFilesChange} />
 
           <BackgroundOptions selected={backgroundOption} onSelect={setBackgroundOption} />
 
@@ -128,25 +142,47 @@ export default function NewBatchPage() {
               </Link>
             </div>
           ) : (
-            <Button
-              onClick={handleProcess}
-              disabled={files.length === 0 || isProcessing}
-              className="w-full py-6 text-base font-medium bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-secondary disabled:text-muted-foreground"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Uploading {files.length} image{files.length !== 1 ? "s" : ""}...
-                </>
-              ) : files.length > 0 ? (
-                <>
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Process {files.length} image{files.length !== 1 ? "s" : ""}
-                </>
-              ) : (
-                "Select images to process"
+            <div className="space-y-3">
+              {/* Upgrade prompt — shown when plan limit hit */}
+              {showUpgradePrompt && (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 px-4 py-3">
+                  <p className="text-sm font-medium text-amber-900 dark:text-amber-200">You have reached your plan limit</p>
+                  <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
+                    Upgrade your plan to process more images this month.
+                  </p>
+                  <Link href="/pricing" className="inline-block mt-2 text-sm font-medium text-amber-900 dark:text-amber-200 underline underline-offset-2">
+                    View plans
+                  </Link>
+                </div>
               )}
-            </Button>
+
+              {/* General error */}
+              {errorMessage && (
+                <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3">
+                  <p className="text-sm text-destructive">{errorMessage}</p>
+                </div>
+              )}
+
+              <Button
+                onClick={handleProcess}
+                disabled={files.length === 0 || isProcessing || showUpgradePrompt}
+                className="w-full py-6 text-base font-medium bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-secondary disabled:text-muted-foreground"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading {files.length} image{files.length !== 1 ? "s" : ""}...
+                  </>
+                ) : files.length > 0 ? (
+                  <>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Process {files.length} image{files.length !== 1 ? "s" : ""}
+                  </>
+                ) : (
+                  "Select images to process"
+                )}
+              </Button>
+            </div>
           )}
         </div>
 
