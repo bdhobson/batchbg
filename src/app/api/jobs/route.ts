@@ -76,10 +76,10 @@ export async function POST(req: NextRequest) {
     await finalizeJobUpload(jobId, files.length);
     await incrementUserUsage(userId, files.length);
 
-    // Submit to Replicate after response is sent, with 12s gap to respect burst limit
+    // Submit to Replicate after response is sent (after() keeps function alive post-response)
     after(async () => {
       for (let i = 0; i < submissions.length; i++) {
-        if (i > 0) await sleep(12000);
+
         const { imageId, filename, buffer } = submissions[i];
         await submitImageToReplicate(imageId, filename, buffer).catch(err =>
           console.error(`Failed to submit image ${imageId} to Replicate:`, err)
