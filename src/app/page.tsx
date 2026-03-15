@@ -28,6 +28,17 @@ const FEATURES = [
 
 const PLANS = [
   {
+    name: 'Free',
+    price: '$0',
+    period: '/mo',
+    images: '5 images/month',
+    features: ['White & transparent bg', 'ZIP download'],
+    cta: 'Start for free',
+    highlight: false,
+    badge: null,
+    href: '/sign-up',
+  },
+  {
     name: 'Starter',
     price: '$19',
     period: '/mo',
@@ -195,7 +206,7 @@ export default async function LandingPage() {
         <section className="border-t border-border py-20 px-6 bg-secondary/10">
           <div className="mx-auto max-w-4xl">
             <h2 className="text-3xl font-bold tracking-tight text-center mb-12">How it works</h2>
-            <div className="grid gap-6 sm:grid-cols-3">
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
               {FEATURES.map((f, i) => (
                 <div key={f.title} className="rounded-xl border border-border bg-card p-6">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-sm font-bold text-secondary-foreground mb-4">
@@ -217,11 +228,11 @@ export default async function LandingPage() {
               <p className="text-muted-foreground text-lg">No credits. No per-image fees. 5 free images/month on every account.</p>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-3">
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
               {PLANS.map((plan) => (
                 <div
                   key={plan.name}
-                  className={`rounded-2xl border p-7 flex flex-col relative ${
+                  className={`rounded-2xl border p-5 flex flex-col relative ${
                     plan.highlight
                       ? 'border-primary bg-primary text-primary-foreground'
                       : 'border-border bg-card'
@@ -262,9 +273,10 @@ export default async function LandingPage() {
                   >
                     {plan.cta}
                   </Link>
-                  <p className={`text-xs text-center mt-3 ${plan.highlight ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
-                    cancel anytime
-                  </p>
+                  {plan.name === 'Free'
+                    ? <p className="text-xs text-center mt-3">&nbsp;</p>
+                    : <p className={`text-xs text-center mt-3 ${plan.highlight ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>cancel anytime</p>
+                  }
                 </div>
               ))}
             </div>
