@@ -16,22 +16,10 @@ export default function OgImage() {
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily: 'sans-serif',
-          position: 'relative',
         }}
       >
-        {/* Subtle grid pattern */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'radial-gradient(circle, #d6d3d1 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-            opacity: 0.4,
-          }}
-        />
-
-        {/* Logo + name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32, zIndex: 1 }}>
+        {/* Logo row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32 }}>
           <div
             style={{
               width: 72,
@@ -48,48 +36,32 @@ export default function OgImage() {
           >
             B
           </div>
-          <span style={{ color: '#1c1917', fontSize: 56, fontWeight: 800, letterSpacing: '-2px' }}>
+          <div style={{ display: 'flex', color: '#1c1917', fontSize: 56, fontWeight: 800, letterSpacing: '-2px' }}>
             Backdrop
-          </span>
+          </div>
         </div>
 
         {/* Tagline */}
-        <div
-          style={{
-            fontSize: 38,
-            fontWeight: 700,
-            color: '#1c1917',
-            marginBottom: 16,
-            letterSpacing: '-0.5px',
-            zIndex: 1,
-          }}
-        >
-          Bulk background removal for{' '}
-          <span style={{ borderBottom: '4px solid #1c1917' }}>product photos.</span>
+        <div style={{ display: 'flex', fontSize: 38, fontWeight: 700, color: '#1c1917', marginBottom: 16 }}>
+          Bulk background removal for product photos.
         </div>
 
         {/* Sub-tagline */}
-        <div style={{ fontSize: 24, color: '#78716c', marginBottom: 48, zIndex: 1 }}>
+        <div style={{ display: 'flex', fontSize: 24, color: '#78716c', marginBottom: 48 }}>
           Upload 500 photos. Get clean images back in minutes.
         </div>
 
         {/* Pills */}
-        <div style={{ display: 'flex', gap: 16, zIndex: 1 }}>
-          {['No per-image fees', 'White & transparent bg', 'ZIP download'].map((label) => (
-            <div
-              key={label}
-              style={{
-                background: '#1c1917',
-                borderRadius: 999,
-                padding: '10px 24px',
-                color: '#fafaf9',
-                fontSize: 20,
-                fontWeight: 500,
-              }}
-            >
-              {label}
-            </div>
-          ))}
+        <div style={{ display: 'flex', gap: 16 }}>
+          <div style={{ display: 'flex', background: '#1c1917', borderRadius: 999, padding: '10px 24px', color: '#fafaf9', fontSize: 20, fontWeight: 500 }}>
+            No per-image fees
+          </div>
+          <div style={{ display: 'flex', background: '#1c1917', borderRadius: 999, padding: '10px 24px', color: '#fafaf9', fontSize: 20, fontWeight: 500 }}>
+            White &amp; transparent bg
+          </div>
+          <div style={{ display: 'flex', background: '#1c1917', borderRadius: 999, padding: '10px 24px', color: '#fafaf9', fontSize: 20, fontWeight: 500 }}>
+            ZIP download
+          </div>
         </div>
       </div>
     ),
