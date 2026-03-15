@@ -25,6 +25,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No images provided' }, { status: 400 });
     }
 
+    if (files.length > 500) {
+      return NextResponse.json(
+        { error: 'batch_too_large', message: 'Maximum 500 images per batch.' },
+        { status: 400 }
+      );
+    }
+
     const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
     for (const file of files) {
       if (!validTypes.includes(file.type)) {

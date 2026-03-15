@@ -14,6 +14,8 @@ interface TrialStatus {
   exhausted: boolean;
 }
 
+const MAX_IMAGES_PER_BATCH = 500;
+
 export default function UploadPage() {
   const router = useRouter();
   const { isSignedIn } = useUser();
@@ -23,6 +25,7 @@ export default function UploadPage() {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [trial, setTrial] = useState<TrialStatus | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -35,9 +38,14 @@ export default function UploadPage() {
     const valid = newFiles.filter((f) =>
       ['image/jpeg', 'image/png', 'image/webp'].includes(f.type)
     );
+    setUploadError(null);
     setFiles((prev) => {
       const existing = new Set(prev.map((f) => f.name + f.size));
-      return [...prev, ...valid.filter((f) => !existing.has(f.name + f.size))];
+      const merged = [...prev, ...valid.filter((f) => !existing.has(f.name + f.size))];
+      if (merged.length > MAX_IMAGES_PER_BATCH) {
+        return merged.slice(0, MAX_IMAGES_PER_BATCH);
+      }
+      return merged;
     });
   }, []);
 
@@ -63,6 +71,7 @@ export default function UploadPage() {
   const handleProcess = async () => {
     if (files.length === 0) return;
     setUploading(true);
+    setUploadError(null);
     try {
       const formData = new FormData();
       formData.append('outputType', outputType);
@@ -74,26 +83,48 @@ export default function UploadPage() {
 
       if (res.status === 402) {
         if (data.error === 'free_trial_exhausted' || data.error === 'free_trial_would_exceed') {
-          // Refresh trial status
           const t = await fetch('/api/trial').then((r) => r.json());
           setTrial(t);
           return;
         }
       }
 
+      if (res.status === 403) {
+        if (data.error === 'plan_limit_reached') {
+          setUploadError(
+            `You've used all ${data.limit?.toLocaleString() ?? ''} images on your plan this month. Upgrade to process more.`
+          );
+          return;
+        }
+        if (data.error === 'plan_limit_would_exceed') {
+          setUploadError(
+            `You only have ${data.remaining?.toLocaleString() ?? 0} image${data.remaining === 1 ? '' : 's'} remaining on your plan this month. Remove some files or upgrade.`
+          );
+          return;
+        }
+        setUploadError(data.message || 'Upload limit reached. Please upgrade your plan.');
+        return;
+      }
+
+      if (!res.ok) {
+        setUploadError('Something went wrong while uploading. Please try again.');
+        return;
+      }
+
       if (data.jobId) {
         router.push(`/processing/${data.jobId}`);
       } else {
-        console.error('Upload error:', data.error);
+        setUploadError('Upload failed — no job was created. Please try again.');
       }
-    } catch (err) {
-      console.error('Upload failed:', err);
+    } catch {
+      setUploadError('Network error — please check your connection and try again.');
     } finally {
       setUploading(false);
     }
   };
 
   const trialExhausted = !isSignedIn && trial?.exhausted;
+  const atLimit = files.length >= MAX_IMAGES_PER_BATCH;
 
   return (
     <main className="min-h-screen bg-gray-950 text-white p-8">
@@ -130,6 +161,28 @@ export default function UploadPage() {
           </div>
         )}
 
+        {/* Upload limit banner */}
+        {atLimit && (
+          <div className="rounded-lg px-4 py-3 mb-6 text-sm bg-yellow-900/40 border border-yellow-700">
+            <p className="font-medium text-yellow-300">
+              ⚠️ Batch capped at {MAX_IMAGES_PER_BATCH} images. Additional files were skipped.
+            </p>
+            <p className="text-yellow-400 mt-0.5">Process this batch first, then start a new one for the rest.</p>
+          </div>
+        )}
+
+        {/* Upload error */}
+        {uploadError && (
+          <div className="rounded-lg px-4 py-3 mb-6 text-sm bg-red-900/50 border border-red-700">
+            <p className="font-medium text-red-300">⚠️ {uploadError}</p>
+            {uploadError.includes('plan') && (
+              <p className="text-red-400 mt-1">
+                <Link href="/pricing" className="underline hover:text-red-200">View upgrade options</Link>
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Drop zone */}
         <div
           onDrop={onDrop}
@@ -146,7 +199,7 @@ export default function UploadPage() {
         >
           <div className="text-5xl mb-4">📁</div>
           <p className="text-lg font-medium">Drop images here or click to browse</p>
-          <p className="text-gray-400 mt-1">JPG, PNG, WEBP · up to 500 images</p>
+          <p className="text-gray-400 mt-1">JPG, PNG, WEBP · up to {MAX_IMAGES_PER_BATCH} images per batch</p>
           <input
             ref={inputRef}
             type="file"

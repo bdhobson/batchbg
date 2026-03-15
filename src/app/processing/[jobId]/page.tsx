@@ -2,7 +2,7 @@
 
 import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { CheckCircle2, XCircle, Loader2, Download, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, XCircle, Loader2, Download, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ImageData {
@@ -85,6 +85,8 @@ export default function ProcessingPage({
     : 0;
 
   const isDone = job.status === 'completed';
+  const allFailed = isDone && job.completedImages === 0 && job.failedImages > 0;
+  const partialFail = isDone && job.completedImages > 0 && job.failedImages > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -108,7 +110,7 @@ export default function ProcessingPage({
         <div className="flex items-start justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {isDone ? 'Batch Complete' : 'Processing Batch'}
+              {allFailed ? 'Batch Failed' : isDone ? 'Batch Complete' : 'Processing Batch'}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">Job {job.id.slice(0, 8)}...</p>
           </div>
@@ -121,10 +123,43 @@ export default function ProcessingPage({
         </div>
 
         <div className="w-full bg-secondary rounded-full h-1.5 mb-6">
-          <div className="bg-primary h-1.5 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+          <div
+            className={`h-1.5 rounded-full transition-all duration-500 ${allFailed ? 'bg-destructive' : 'bg-primary'}`}
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
-        {isDone && (
+        {/* All images failed — prominent error state */}
+        {allFailed && (
+          <div className="rounded-xl border border-destructive/60 bg-destructive/10 p-5 mb-6 flex items-start gap-4">
+            <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-semibold text-foreground">All {job.failedImages} image{job.failedImages !== 1 ? 's' : ''} failed to process</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                This is usually caused by a temporary issue with our AI provider. Your image quota has not been charged for failed images. Please try again.
+              </p>
+            </div>
+            <Link href="/new">
+              <Button variant="outline" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Try again
+              </Button>
+            </Link>
+          </div>
+        )}
+
+        {/* Partial failure warning */}
+        {partialFail && (
+          <div className="rounded-xl border border-yellow-500/40 bg-yellow-500/10 p-4 mb-6 flex items-start gap-3">
+            <AlertTriangle className="h-4 w-4 text-yellow-500 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{job.failedImages} image{job.failedImages !== 1 ? 's' : ''} failed</span> — failed images are marked with a red icon. The rest downloaded successfully.
+            </p>
+          </div>
+        )}
+
+        {/* Success + download */}
+        {isDone && !allFailed && (
           <div className="rounded-xl border border-border bg-card p-5 mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <CheckCircle2 className="h-5 w-5 text-foreground" />
@@ -168,8 +203,9 @@ export default function ProcessingPage({
                 </div>
               )}
               {img.status === 'failed' && (
-                <div className="absolute top-1.5 right-1.5 w-6 h-6 bg-destructive rounded-full flex items-center justify-center">
-                  <XCircle className="h-3.5 w-3.5 text-destructive-foreground" />
+                <div className="absolute inset-0 bg-background/70 flex flex-col items-center justify-center gap-1">
+                  <XCircle className="h-6 w-6 text-destructive" />
+                  <span className="text-xs text-muted-foreground font-medium">Failed</span>
                 </div>
               )}
               <div className="absolute bottom-0 left-0 right-0 bg-foreground/80 text-background text-xs px-2 py-1 truncate opacity-0 group-hover:opacity-100 transition-opacity">
