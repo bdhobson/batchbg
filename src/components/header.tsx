@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { UserButton } from "@clerk/nextjs"
+import { CreditCard } from "lucide-react"
 
 interface HeaderProps {
   showNewBatch?: boolean
@@ -45,7 +46,15 @@ export function Header({ showNewBatch = false, showDashboard = false, showBillin
               </Button>
             </Link>
           )}
-          <UserButton />
+          <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Link
+                label="Billing"
+                labelIcon={<CreditCard className="h-4 w-4" />}
+                href="/billing"
+              />
+            </UserButton.MenuItems>
+          </UserButton>
         </div>
       </div>
     </header>
