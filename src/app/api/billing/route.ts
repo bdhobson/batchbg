@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/auth';
 import { getUserPlan, getUserUsage } from '@/lib/usage';
 import pool from '@/lib/db';
 

@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { getUserJobs } from '@/lib/jobs';
 import { getUserUsage, getUserPlan } from '@/lib/usage';

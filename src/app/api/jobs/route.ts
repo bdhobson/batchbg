@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createJob, addImageToJob, finalizeJobUpload } from '@/lib/jobs';
 import { submitImageToReplicate } from '@/lib/processor';
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/auth';
 import { incrementUserUsage, getUserUsage, getUserPlan } from '@/lib/usage';
 import pool from '@/lib/db';
 import { after } from 'next/server';

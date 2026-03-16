@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getJob, getJobImages } from '@/lib/jobs';
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/auth';
 import archiver from 'archiver';
 
 function isSafeSegment(segment: string): boolean {
