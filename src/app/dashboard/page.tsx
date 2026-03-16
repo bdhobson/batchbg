@@ -84,18 +84,6 @@ export default async function DashboardPage({
           </div>
         )}
 
-        {/* Manage billing link for paid users */}
-        {!isFreeTrial && (
-          <div className="flex justify-end">
-            <Link
-              href="/billing"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
-            >
-              Manage billing
-            </Link>
-          </div>
-        )}
-
         <UsageCard
           used={imagesUsed}
           total={monthlyLimit}
