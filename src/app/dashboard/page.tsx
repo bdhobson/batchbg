@@ -6,7 +6,6 @@ import { Header } from '@/components/header';
 import { UsageCard } from '@/components/usage-card';
 import { JobHistory } from '@/components/job-history';
 import Link from 'next/link';
-import DashboardClient from './DashboardClient';
 
 export default async function DashboardPage({
   searchParams,
@@ -31,7 +30,6 @@ export default async function DashboardPage({
 
   const month = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
 
-  // Map DB jobs to JobHistory format
   type JobStatus = "completed" | "processing" | "pending";
   const mappedJobs = jobs.map((job: {
     id: string;
@@ -68,7 +66,7 @@ export default async function DashboardPage({
           </div>
         )}
 
-        {/* Upgrade banner */}
+        {/* Upgrade banner for free trial users near limit */}
         {showUpgradeBanner && !upgraded && (
           <div className="rounded-xl border border-border bg-card px-5 py-4 flex items-center justify-between gap-4">
             <div>
@@ -78,10 +76,22 @@ export default async function DashboardPage({
               </p>
             </div>
             <Link
-              href="/pricing"
+              href="/billing"
               className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
             >
               Upgrade
+            </Link>
+          </div>
+        )}
+
+        {/* Manage billing link for paid users */}
+        {!isFreeTrial && (
+          <div className="flex justify-end">
+            <Link
+              href="/billing"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+            >
+              Manage billing
             </Link>
           </div>
         )}
@@ -95,8 +105,6 @@ export default async function DashboardPage({
 
         <JobHistory jobs={mappedJobs} />
       </main>
-
-      <DashboardClient />
     </div>
   );
 }
