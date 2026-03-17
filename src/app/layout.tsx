@@ -8,13 +8,13 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://backdropimage.com"),
-  title: "Backdrop — Bulk Background Removal for Product Photos",
+  title: "Backdrop - Bulk Background Removal for Product Photos",
   description: "Remove backgrounds from hundreds of product photos at once. Built for e-commerce sellers on Amazon, Etsy, and Shopify. Flat monthly pricing, no per-image fees.",
   alternates: {
     canonical: "https://backdropimage.com",
   },
   openGraph: {
-    title: "Backdrop — Bulk Background Removal for Product Photos",
+    title: "Backdrop - Bulk Background Removal for Product Photos",
     description: "Upload 500 product photos, get clean white-background images back in minutes. Built for e-commerce sellers. Flat monthly pricing.",
     url: "https://backdropimage.com",
     siteName: "Backdrop",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Backdrop — Bulk Background Removal for Product Photos",
+    title: "Backdrop - Bulk Background Removal for Product Photos",
     description: "Upload 500 product photos, get clean white-background images back in minutes. No per-image fees.",
   },
   icons: {
