@@ -64,8 +64,8 @@ export function BeforeAfterCarousel() {
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Before */}
                 <div className="rounded-2xl border border-border bg-card overflow-hidden">
-                  <div className="px-5 py-3 border-b border-border">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Before</span>
+                  <div className="px-5 py-3 bg-primary">
+                    <span className="text-xs font-semibold text-primary-foreground uppercase tracking-widest">Before</span>
                   </div>
                   <div className="p-8 flex items-center justify-center min-h-64 bg-secondary/30">
                     <div className="w-64 h-64 rounded-xl overflow-hidden">
@@ -80,8 +80,8 @@ export function BeforeAfterCarousel() {
 
                 {/* After */}
                 <div className="rounded-2xl border border-primary/40 bg-card overflow-hidden">
-                  <div className="px-5 py-3 border-b border-border">
-                    <span className="text-xs font-semibold text-primary uppercase tracking-widest">After</span>
+                  <div className="px-5 py-3 bg-primary">
+                    <span className="text-xs font-semibold text-primary-foreground uppercase tracking-widest">After</span>
                   </div>
                   <div className="p-8 flex items-center justify-center min-h-64">
                     <div className="w-64 h-64 rounded-xl overflow-hidden bg-white border border-border/30">
