@@ -182,11 +182,13 @@ export default function ProcessingPage({
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {job.images.map((img) => (
             <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden bg-secondary border border-border group">
-              <img
-                src={img.status === 'completed' && img.processedUrl ? img.processedUrl : img.originalUrl}
-                alt={img.filename}
-                className="w-full h-full object-cover"
-              />
+              {(img.status === 'completed' || img.status === 'failed') && (
+                <img
+                  src={img.status === 'completed' && img.processedUrl ? img.processedUrl : img.originalUrl}
+                  alt={img.filename}
+                  className="w-full h-full object-cover"
+                />
+              )}
               {img.status === 'pending' && (
                 <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
                   <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
