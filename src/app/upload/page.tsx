@@ -214,7 +214,7 @@ export default function UploadPage() {
         {files.length > 0 && (
           <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
             <span>{files.length} file{files.length !== 1 ? 's' : ''} · {formatSize(totalSize)}</span>
-            <button onClick={() => setFiles([])} className="text-red-400 hover:text-red-300">Clear all</button>
+            <button onClick={() => { setFiles([]); if (inputRef.current) inputRef.current.value = ""; }} className="text-red-400 hover:text-red-300">Clear all</button>
           </div>
         )}
 
