@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BeforeAfterCarousel } from '@/components/before-after-carousel';
 import { auth } from '@/lib/auth';
 import { ArrowRight, Upload, Zap, Download, CheckCircle, Star, Package } from 'lucide-react';
 
@@ -159,39 +160,7 @@ export default async function LandingPage() {
               <p className="text-muted-foreground text-lg">Upload. Process. Download. That&apos;s it.</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Before */}
-              <div className="rounded-2xl border border-border bg-card overflow-hidden">
-                <div className="px-5 py-3 border-b border-border">
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Before</span>
-                </div>
-                <div className="p-8 flex items-center justify-center min-h-64 bg-secondary/30">
-                  <div className="relative w-64 h-64 rounded-xl overflow-hidden">
-                    <img
-                      src="/demo-before.png"
-                      alt="Product photo with cluttered background"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* After */}
-              <div className="rounded-2xl border border-primary/40 bg-card overflow-hidden">
-                <div className="px-5 py-3 border-b border-border">
-                  <span className="text-xs font-semibold text-primary uppercase tracking-widest">After</span>
-                </div>
-                <div className="p-8 flex items-center justify-center min-h-64">
-                  <div className="relative w-64 h-64 rounded-xl overflow-hidden bg-white border border-border/30">
-                    <img
-                      src="/demo-after.png"
-                      alt="Product photo with clean white background"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <BeforeAfterCarousel />
           </div>
         </section>
 

@@ -1,0 +1,95 @@
+'use client';
+
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+const PAIRS = [
+  {
+    before: '/demo-before.png',
+    after: '/demo-after.png',
+    label: 'Product photo',
+  },
+  // Add more pairs here as images become available:
+  // { before: '/demo-before-2.png', after: '/demo-after-2.png', label: 'Clothing item' },
+  // { before: '/demo-before-3.png', after: '/demo-after-3.png', label: 'Electronics' },
+];
+
+export function BeforeAfterCarousel() {
+  const [index, setIndex] = useState(0);
+
+  const prev = () => setIndex((i) => (i - 1 + PAIRS.length) % PAIRS.length);
+  const next = () => setIndex((i) => (i + 1) % PAIRS.length);
+
+  const pair = PAIRS[index];
+  const showNav = PAIRS.length > 1;
+
+  return (
+    <div className="relative">
+      {showNav && (
+        <>
+          <button
+            onClick={prev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-9 h-9 rounded-full border border-border bg-card shadow-sm flex items-center justify-center hover:bg-secondary transition-colors"
+            aria-label="Previous"
+          >
+            <ChevronLeft className="h-4 w-4 text-muted-foreground" />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-9 h-9 rounded-full border border-border bg-card shadow-sm flex items-center justify-center hover:bg-secondary transition-colors"
+            aria-label="Next"
+          >
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </>
+      )}
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+          <div className="px-5 py-3 border-b border-border">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Before</span>
+          </div>
+          <div className="p-8 flex items-center justify-center min-h-64 bg-secondary/30">
+            <div className="relative w-64 h-64 rounded-xl overflow-hidden">
+              <img
+                src={pair.before}
+                alt={`${pair.label} with original background`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-primary/40 bg-card overflow-hidden">
+          <div className="px-5 py-3 border-b border-border">
+            <span className="text-xs font-semibold text-primary uppercase tracking-widest">After</span>
+          </div>
+          <div className="p-8 flex items-center justify-center min-h-64">
+            <div className="relative w-64 h-64 rounded-xl overflow-hidden bg-white border border-border/30">
+              <img
+                src={pair.after}
+                alt={`${pair.label} with clean background`}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {showNav && (
+        <div className="flex justify-center gap-2 mt-6">
+          {PAIRS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                i === index ? 'bg-primary' : 'bg-border hover:bg-muted-foreground'
+              }`}
+              aria-label={`Go to pair ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
