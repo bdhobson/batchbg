@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const PAIRS = [
@@ -11,71 +13,102 @@ const PAIRS = [
 ];
 
 export function BeforeAfterCarousel() {
-  const [index, setIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const prev = () => setIndex((i) => (i - 1 + PAIRS.length) % PAIRS.length);
-  const next = () => setIndex((i) => (i + 1) % PAIRS.length);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: 'center' },
+    [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]
+  );
 
-  const pair = PAIRS[index];
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on('select', onSelect);
+    return () => { emblaApi.off('select', onSelect); };
+  }, [emblaApi]);
 
   return (
     <div className="relative">
+      {/* Arrows */}
       <button
-        onClick={prev}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-9 h-9 rounded-full border border-border bg-card shadow-sm flex items-center justify-center hover:bg-secondary transition-colors"
+        onClick={scrollPrev}
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-9 h-9 rounded-full border border-border bg-card shadow-md flex items-center justify-center hover:bg-secondary transition-colors"
         aria-label="Previous"
       >
         <ChevronLeft className="h-4 w-4 text-muted-foreground" />
       </button>
       <button
-        onClick={next}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-9 h-9 rounded-full border border-border bg-card shadow-sm flex items-center justify-center hover:bg-secondary transition-colors"
+        onClick={scrollNext}
+        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-9 h-9 rounded-full border border-border bg-card shadow-md flex items-center justify-center hover:bg-secondary transition-colors"
         aria-label="Next"
       >
         <ChevronRight className="h-4 w-4 text-muted-foreground" />
       </button>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="rounded-2xl border border-border bg-card overflow-hidden">
-          <div className="px-5 py-3 border-b border-border">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Before</span>
-          </div>
-          <div className="p-8 flex items-center justify-center min-h-64 bg-secondary/30">
-            <div className="relative w-64 h-64 rounded-xl overflow-hidden">
-              <img
-                key={pair.before}
-                src={pair.before}
-                alt={`${pair.label} with original background`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
+      {/* Embla viewport */}
+      <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
+        <div className="flex">
+          {PAIRS.map((pair, i) => (
+            <div
+              key={i}
+              className="flex-none w-full px-2 transition-all duration-500"
+              style={{
+                opacity: i === selectedIndex ? 1 : 0.4,
+                transform: i === selectedIndex ? 'scale(1)' : 'scale(0.92)',
+                transition: 'opacity 0.5s ease, transform 0.5s ease',
+              }}
+            >
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Before */}
+                <div className="rounded-2xl border border-border bg-card overflow-hidden">
+                  <div className="px-5 py-3 border-b border-border">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Before</span>
+                  </div>
+                  <div className="p-8 flex items-center justify-center min-h-64 bg-secondary/30">
+                    <div className="w-64 h-64 rounded-xl overflow-hidden">
+                      <img
+                        src={pair.before}
+                        alt={`${pair.label} with original background`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
 
-        <div className="rounded-2xl border border-primary/40 bg-card overflow-hidden">
-          <div className="px-5 py-3 border-b border-border">
-            <span className="text-xs font-semibold text-primary uppercase tracking-widest">After</span>
-          </div>
-          <div className="p-8 flex items-center justify-center min-h-64">
-            <div className="relative w-64 h-64 rounded-xl overflow-hidden bg-white border border-border/30">
-              <img
-                key={pair.after}
-                src={pair.after}
-                alt={`${pair.label} with clean background`}
-                className="w-full h-full object-contain"
-              />
+                {/* After */}
+                <div className="rounded-2xl border border-primary/40 bg-card overflow-hidden">
+                  <div className="px-5 py-3 border-b border-border">
+                    <span className="text-xs font-semibold text-primary uppercase tracking-widest">After</span>
+                  </div>
+                  <div className="p-8 flex items-center justify-center min-h-64">
+                    <div className="w-64 h-64 rounded-xl overflow-hidden bg-white border border-border/30">
+                      <img
+                        src={pair.after}
+                        alt={`${pair.label} with clean background`}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
+      {/* Dots */}
       <div className="flex justify-center gap-2 mt-6">
         {PAIRS.map((_, i) => (
           <button
             key={i}
-            onClick={() => setIndex(i)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              i === index ? 'bg-primary' : 'bg-border hover:bg-muted-foreground'
+            onClick={() => emblaApi?.scrollTo(i)}
+            className={`transition-all duration-300 rounded-full ${
+              i === selectedIndex
+                ? 'bg-primary w-5 h-2'
+                : 'bg-border hover:bg-muted-foreground w-2 h-2'
             }`}
             aria-label={`Go to pair ${i + 1}`}
           />
