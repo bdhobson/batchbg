@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { Upload, X, ImageIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -11,6 +11,7 @@ interface DropzoneProps {
 
 export function Dropzone({ files, onFilesChange }: DropzoneProps) {
   const [isDragOver, setIsDragOver] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -58,6 +59,7 @@ export function Dropzone({ files, onFilesChange }: DropzoneProps) {
         )}
       >
         <input
+          ref={inputRef}
           type="file"
           accept="image/jpeg,image/png,image/webp"
           multiple
@@ -86,7 +88,7 @@ export function Dropzone({ files, onFilesChange }: DropzoneProps) {
               {files.length} image{files.length !== 1 ? "s" : ""} selected
             </p>
             <button
-              onClick={() => onFilesChange([])}
+              onClick={() => { onFilesChange([]); if (inputRef.current) inputRef.current.value = ""; }}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               Clear all
