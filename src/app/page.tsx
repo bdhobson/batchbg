@@ -166,16 +166,12 @@ export default async function LandingPage() {
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Before</span>
                 </div>
                 <div className="p-8 flex items-center justify-center min-h-64 bg-secondary/30">
-                  <div className="relative w-52 h-52 rounded-xl overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-secondary via-accent to-muted" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-32 h-32 rounded-lg bg-card/60 border border-border flex items-center justify-center">
-                        <Package className="h-16 w-16 text-muted-foreground" />
-                      </div>
-                    </div>
-                    <div className="absolute bottom-2 left-0 right-0 text-center">
-                      <span className="text-xs text-muted-foreground bg-background/80 px-2 py-0.5 rounded">Cluttered background</span>
-                    </div>
+                  <div className="relative w-64 h-64 rounded-xl overflow-hidden">
+                    <img
+                      src="/demo-before.png"
+                      alt="Product photo with cluttered background"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -186,15 +182,12 @@ export default async function LandingPage() {
                   <span className="text-xs font-semibold text-primary uppercase tracking-widest">After</span>
                 </div>
                 <div className="p-8 flex items-center justify-center min-h-64">
-                  <div className="relative w-52 h-52 rounded-xl overflow-hidden bg-white border border-border/30">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-32 h-32 rounded-lg flex items-center justify-center">
-                        <Package className="h-16 w-16 text-zinc-700" />
-                      </div>
-                    </div>
-                    <div className="absolute bottom-2 left-0 right-0 text-center">
-                      <span className="text-xs text-zinc-400 bg-white/80 px-2 py-0.5 rounded">Clean white background</span>
-                    </div>
+                  <div className="relative w-64 h-64 rounded-xl overflow-hidden bg-white border border-border/30">
+                    <img
+                      src="/demo-after.png"
+                      alt="Product photo with clean white background"
+                      className="w-full h-full object-contain"
+                    />
                   </div>
                 </div>
               </div>
