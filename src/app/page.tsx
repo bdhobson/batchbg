@@ -293,18 +293,32 @@ export default async function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded bg-primary">
-              <span className="text-xs font-bold text-primary-foreground">B</span>
+        <div className="mx-auto max-w-6xl px-6 py-10 space-y-6 text-sm text-muted-foreground">
+          {/* Seller pages row */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
+            <span className="font-medium text-foreground">Built for sellers:</span>
+            <div className="flex items-center gap-4">
+              <Link href="/amazon-fba" className="hover:text-foreground transition-colors">Amazon FBA</Link>
+              <span>·</span>
+              <Link href="/ebay-sellers" className="hover:text-foreground transition-colors">eBay</Link>
+              <span>·</span>
+              <Link href="/poshmark" className="hover:text-foreground transition-colors">Poshmark</Link>
             </div>
-            <span className="font-medium text-foreground">Backdrop</span>
           </div>
-          <span>© {new Date().getFullYear()} Backdrop. All rights reserved.</span>
-          <div className="flex gap-6">
-            <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
-            <Link href="/sign-in" className="hover:text-foreground transition-colors">Sign in</Link>
-            <Link href="/sign-up" className="hover:text-foreground transition-colors">Sign up</Link>
+          {/* Bottom row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-primary">
+                <span className="text-xs font-bold text-primary-foreground">B</span>
+              </div>
+              <span className="font-medium text-foreground">Backdrop</span>
+            </div>
+            <span>© {new Date().getFullYear()} Backdrop. All rights reserved.</span>
+            <div className="flex gap-6">
+              <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+              <Link href="/sign-in" className="hover:text-foreground transition-colors">Sign in</Link>
+              <Link href="/sign-up" className="hover:text-foreground transition-colors">Sign up</Link>
+            </div>
           </div>
         </div>
       </footer>

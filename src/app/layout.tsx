@@ -8,14 +8,25 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://backdropimage.com"),
-  title: "Backdrop - Bulk Background Removal for Product Photos",
-  description: "Remove backgrounds from hundreds of product photos at once. Built for e-commerce sellers on Amazon, Etsy, and Shopify. Flat monthly pricing, no per-image fees.",
+  title: {
+    default: "Backdrop — Bulk Background Remover for Product Photos",
+    template: "%s | Backdrop",
+  },
+  description: "Remove backgrounds from hundreds of product photos in minutes. Flat monthly pricing, no per-image fees. Built for eBay, Amazon FBA, Poshmark, and Shopify sellers.",
+  keywords: [
+    "bulk background remover",
+    "product photo background removal",
+    "Amazon FBA background remover",
+    "eBay listing photos",
+    "Poshmark photo editor",
+    "batch background removal",
+  ],
   alternates: {
     canonical: "https://backdropimage.com",
   },
   openGraph: {
-    title: "Backdrop - Bulk Background Removal for Product Photos",
-    description: "Upload 500 product photos, get clean white-background images back in minutes. Built for e-commerce sellers. Flat monthly pricing.",
+    title: "Backdrop — Bulk Background Remover for Product Photos",
+    description: "Remove backgrounds from hundreds of product photos in minutes. Flat monthly pricing, no per-image fees.",
     url: "https://backdropimage.com",
     siteName: "Backdrop",
     type: "website",
@@ -23,8 +34,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Backdrop - Bulk Background Removal for Product Photos",
-    description: "Upload 500 product photos, get clean white-background images back in minutes. No per-image fees.",
+    title: "Backdrop — Bulk Background Remover for Product Photos",
+    description: "Remove backgrounds from hundreds of product photos in minutes. No per-image fees.",
   },
   icons: {
     icon: "/favicon.ico",
