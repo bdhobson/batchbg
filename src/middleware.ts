@@ -9,6 +9,7 @@ const isPublicRoute = createRouteMatcher([
   '/amazon-fba(.*)',
   '/ebay-sellers(.*)',
   '/poshmark(.*)',
+  '/api/jobs/(.*)/image/(.*)',
   '/api/webhooks/stripe(.*)',
   '/opengraph-image(.*)',
   '/sitemap.xml',
