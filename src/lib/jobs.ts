@@ -130,7 +130,7 @@ export async function getUserJobs(clerkUserId: string): Promise<Job[]> {
            ORDER BY ji.created_at
            LIMIT 3
          ),
-         ARRAY[]::text[]
+         ARRAY[]::uuid[]
        ) AS thumbnail_image_ids
      FROM jobs j
      WHERE j.clerk_user_id = $1
