@@ -15,6 +15,7 @@ export interface Job {
   updated_at: string;
   clerk_user_id?: string | null;
   session_token?: string | null;
+  thumbnails?: string[];
 }
 
 export interface JobImage {
@@ -117,7 +118,22 @@ export async function incrementJobCompleted(jobId: string, failed = false) {
 
 export async function getUserJobs(clerkUserId: string): Promise<Job[]> {
   const res = await pool.query(
-    `SELECT * FROM jobs WHERE clerk_user_id = $1 ORDER BY created_at DESC LIMIT 50`,
+    `SELECT j.*,
+       COALESCE(
+         ARRAY(
+           SELECT ji.processed_url
+           FROM job_images ji
+           WHERE ji.job_id = j.id
+             AND ji.processed_url IS NOT NULL
+           ORDER BY ji.created_at
+           LIMIT 3
+         ),
+         ARRAY[]::text[]
+       ) AS thumbnails
+     FROM jobs j
+     WHERE j.clerk_user_id = $1
+     ORDER BY j.created_at DESC
+     LIMIT 50`,
     [clerkUserId]
   );
   return res.rows;

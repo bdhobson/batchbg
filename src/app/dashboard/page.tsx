@@ -35,12 +35,14 @@ export default async function DashboardPage({
     status: string;
     output_type: string;
     failed_images: number;
+    thumbnails?: string[];
   }) => ({
     id: job.id,
     name: new Date(job.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' batch',
     imageCount: job.total_images,
     status: (job.status === 'queued' ? 'pending' : job.status === 'failed' ? 'completed' : job.status) as JobStatus,
     createdAt: new Date(job.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    thumbnails: (job.thumbnails as string[]) || [],
   }));
 
   return (
