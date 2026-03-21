@@ -16,6 +16,7 @@ export interface Job {
   clerk_user_id?: string | null;
   session_token?: string | null;
   thumbnails?: string[];
+  thumbnail_image_ids?: string[];
 }
 
 export interface JobImage {
@@ -121,15 +122,16 @@ export async function getUserJobs(clerkUserId: string): Promise<Job[]> {
     `SELECT j.*,
        COALESCE(
          ARRAY(
-           SELECT ji.processed_url
+           SELECT ji.id
            FROM job_images ji
            WHERE ji.job_id = j.id
+             AND ji.status = 'completed'
              AND ji.processed_url IS NOT NULL
            ORDER BY ji.created_at
            LIMIT 3
          ),
          ARRAY[]::text[]
-       ) AS thumbnails
+       ) AS thumbnail_image_ids
      FROM jobs j
      WHERE j.clerk_user_id = $1
      ORDER BY j.created_at DESC

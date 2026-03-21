@@ -35,14 +35,17 @@ export default async function DashboardPage({
     status: string;
     output_type: string;
     failed_images: number;
-    thumbnails?: string[];
+    thumbnail_image_ids?: string[];
   }) => ({
     id: job.id,
     name: new Date(job.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' batch',
     imageCount: job.total_images,
     status: (job.status === 'queued' ? 'pending' : job.status === 'failed' ? 'completed' : job.status) as JobStatus,
     createdAt: new Date(job.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    thumbnails: (job.thumbnails as string[]) || [],
+    // Use server-side proxy URLs so private Vercel Blob auth is handled transparently
+    thumbnails: (job.thumbnail_image_ids ?? []).map(
+      (imgId: string) => `/api/jobs/${job.id}/image/${imgId}`
+    ),
   }));
 
   return (
