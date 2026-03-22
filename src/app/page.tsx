@@ -1,7 +1,14 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BeforeAfterCarousel } from '@/components/before-after-carousel';
 import { auth } from '@/lib/auth';
 import { ArrowRight, Upload, Zap, Download, CheckCircle, Star, Package } from 'lucide-react';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://backdropimage.com',
+  },
+};
 
 const STATS = [
   { value: '2s', label: 'avg per image' },
