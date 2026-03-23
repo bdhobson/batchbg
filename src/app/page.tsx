@@ -191,7 +191,7 @@ export default async function LandingPage() {
 
         {/* Pricing */}
         <section id="pricing" className="border-t border-border py-20 px-6">
-          <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-4xl">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Simple, flat pricing</h2>
               <p className="text-muted-foreground text-lg">No credits. No per-image fees. 5 free images/month on every account.</p>
