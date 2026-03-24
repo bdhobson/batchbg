@@ -41,6 +41,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@stripe/stripe-js": "^8.9.0",
     "@tailwindcss/postcss": "^4.2.1",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.3.1",
     "archiver": "^7.0.1",
     "class-variance-authority": "^0.7.1",
