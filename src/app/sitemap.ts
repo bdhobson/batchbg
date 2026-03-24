@@ -27,6 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: 'https://backdropimage.com/etsy-sellers',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: 'https://backdropimage.com/pricing',
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -34,6 +40,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: 'https://backdropimage.com/privacy',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: 'https://backdropimage.com/terms',
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.3,
