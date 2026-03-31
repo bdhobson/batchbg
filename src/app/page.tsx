@@ -309,6 +309,10 @@ export default async function LandingPage() {
               <span>·</span>
               <Link href="/ebay-sellers" className="hover:text-foreground transition-colors">eBay</Link>
               <span>·</span>
+              <Link href="/shopify-sellers" className="hover:text-foreground transition-colors">Shopify</Link>
+              <span>·</span>
+              <Link href="/woocommerce" className="hover:text-foreground transition-colors">WooCommerce</Link>
+              <span>·</span>
               <Link href="/poshmark" className="hover:text-foreground transition-colors">Poshmark</Link>
             </div>
           </div>

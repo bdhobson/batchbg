@@ -33,6 +33,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: 'https://backdropimage.com/shopify-sellers',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: 'https://backdropimage.com/woocommerce',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: 'https://backdropimage.com/pricing',
       lastModified: new Date(),
       changeFrequency: 'monthly',

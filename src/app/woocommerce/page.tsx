@@ -3,57 +3,54 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle, Star } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Background Remover for Etsy Sellers — Bulk Clean Product Photos',
-  description:
-    'Make your Etsy listings stand out. Remove backgrounds from product photos in bulk — clean white or transparent results in seconds. No Photoshop, no per-image fees. 5 free images to start.',
+  title: "Background Remover for WooCommerce Stores — Bulk Product Image Tool",
+  description: "WooCommerce product photos with clean white or transparent backgrounds improve conversions and look professional. Backdrop removes backgrounds from your catalog in minutes — flat pricing.",
   alternates: {
-    canonical: 'https://backdropimage.com/etsy-sellers',
+    canonical: "https://backdropimage.com/woocommerce",
   },
   openGraph: {
-    title: 'Background Remover for Etsy Sellers — Bulk Clean Product Photos',
-    description:
-      'Make your Etsy listings stand out. Remove backgrounds from product photos in bulk — clean white or transparent results in seconds.',
-    url: 'https://backdropimage.com/etsy-sellers',
-    siteName: 'Backdrop',
-    type: 'website',
-    locale: 'en_US',
+    title: "Background Remover for WooCommerce Stores — Bulk Product Image Tool",
+    description: "WooCommerce product photos with clean white or transparent backgrounds improve conversions. Bulk background removal — flat pricing, no per-image fees.",
+    url: "https://backdropimage.com/woocommerce",
+    siteName: "Backdrop",
+    type: "website",
+    locale: "en_US",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Background Remover for Etsy Sellers — Bulk Clean Product Photos',
-    description:
-      'Remove backgrounds from all your Etsy listing photos at once. 5 free images to start.',
+    card: "summary_large_image",
+    title: "Background Remover for WooCommerce Stores — Bulk Product Image Tool",
+    description: "WooCommerce product photos with clean backgrounds improve conversions. Bulk AI background removal — flat pricing.",
   },
 };
 
 const BULLETS = [
-  'Batch process your entire Etsy shop at once',
-  'White or transparent PNG backgrounds',
-  'Works on jewelry, candles, art prints, ceramics — any product',
-  'Download ZIP with original filenames preserved',
-  'Flat monthly pricing — no per-image fees',
+  "White or transparent backgrounds — your choice",
+  "Process 500+ WooCommerce product images per batch",
+  "~2 seconds per image with AI",
+  "Download ZIP — drop into WordPress Media Library",
+  "Flat monthly pricing — no per-image fees, ever",
 ];
 
 const FAQS = [
   {
-    q: 'What types of Etsy products work best?',
-    a: "Backdrop works great on jewelry, handmade goods, candles, art prints, ceramics, and most physical products. It handles complex shapes and fine details — things like necklace chains, mug handles, and textured surfaces all come out cleanly.",
+    q: "What background format works best for WooCommerce?",
+    a: "Transparent PNG backgrounds give you the most flexibility in WooCommerce — they work with any theme color or layout. Pure white (#FFFFFF) JPEGs are slightly smaller files and work great on white-background themes like Storefront and Flatsome.",
   },
   {
-    q: 'Should I use white or transparent backgrounds on Etsy?',
-    a: "Both work. Transparent PNG lets you place your product on any background later — great for mockups or lifestyle-style listings. White backgrounds give a clean, consistent look that many top Etsy sellers prefer. Backdrop lets you choose either (or a custom color).",
+    q: "How do I get processed images into my WooCommerce store?",
+    a: "Download the ZIP from Backdrop, then drag all images into your WordPress Media Library at once. Go to each product, swap the product image — your original filenames are preserved so it's easy to match images to products.",
   },
   {
-    q: 'How many photos can I process at once?',
-    a: 'Up to 500 images per batch. Monthly plans start at 1,000 images/month, so you can process your full shop inventory in multiple batches in a single session.',
+    q: "Can Backdrop handle variable products with many images?",
+    a: "Yes. Upload all variant images in one batch. Backdrop processes them all and returns a ZIP with original filenames intact. If you have 400 color/size variants, that's one upload and one download.",
   },
   {
-    q: 'Will it damage image quality?',
-    a: "No. Your images are processed at full resolution and output as PNG — a lossless format. The only thing that changes is the background; the product itself is untouched.",
+    q: "Is there a WooCommerce plugin?",
+    a: "Not yet — Backdrop is a standalone web tool. Download your processed images and upload them to WooCommerce via the standard media library workflow. This actually gives you more control over exactly which images get updated.",
   },
 ];
 
-export default function EtsySellersPage() {
+export default function WooCommercePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -66,16 +63,10 @@ export default function EtsySellersPage() {
             <span className="text-lg font-semibold tracking-tight">Backdrop</span>
           </Link>
           <div className="flex items-center gap-4">
-            <Link
-              href="/#pricing"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link href="/#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Pricing
             </Link>
-            <Link
-              href="/sign-in"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link href="/sign-in" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Sign in
             </Link>
             <Link
@@ -92,23 +83,21 @@ export default function EtsySellersPage() {
         {/* Hero */}
         <section className="mx-auto max-w-4xl px-6 pt-16 pb-20 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/30 px-4 py-1.5 text-sm text-muted-foreground mb-6">
-            <span>🛒</span>
-            <span>Built for Etsy sellers</span>
+            <span>🔌</span>
+            <span>Built for WooCommerce store owners</span>
           </div>
           <h1 className="text-4xl font-bold tracking-tight leading-tight sm:text-5xl md:text-6xl mb-6">
-            Bulk Background Remover
-            <br />
-            <span className="text-muted-foreground">for Etsy Sellers</span>
+            WooCommerce Product Photos —<br />
+            <span className="text-muted-foreground">Clean Backgrounds, Bulk Speed</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Clean product photos get more clicks and convert better. Remove backgrounds from your
-            entire Etsy shop in minutes — not an afternoon in Photoshop.
+            Inconsistent product photos kill WooCommerce conversions. Backdrop gives your entire catalog a professional, uniform look — white or transparent backgrounds, processed in bulk at flat-rate pricing.
           </p>
           <Link
             href="/sign-up"
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
           >
-            Try Free — 5 Images/Month
+            Start Free — 5 Images/Month, No Credit Card
             <ArrowRight className="h-5 w-5" />
           </Link>
         </section>
@@ -117,7 +106,7 @@ export default function EtsySellersPage() {
         <section className="border-t border-border py-20 px-6 bg-secondary/10">
           <div className="mx-auto max-w-3xl">
             <h2 className="text-2xl font-bold tracking-tight text-center mb-10">
-              Everything Etsy sellers need for professional photos
+              Everything WooCommerce sellers need for professional product images
             </h2>
             <ul className="space-y-4 max-w-xl mx-auto">
               {BULLETS.map((b) => (
@@ -140,10 +129,9 @@ export default function EtsySellersPage() {
                 ))}
               </div>
               <p className="text-xl text-foreground leading-relaxed mb-4">
-                &ldquo;I run an Etsy jewelry shop. Used to spend hours in Photoshop every time I listed new
-                pieces. Now I drop everything in and it&apos;s done in two minutes.&rdquo;
+                &ldquo;I had 600 WooCommerce products with photos from 3 different photographers — all inconsistent. Backdrop made them look like one cohesive catalog in an afternoon.&rdquo;
               </p>
-              <p className="text-sm text-muted-foreground">— Etsy jewelry seller</p>
+              <p className="text-sm text-muted-foreground">— WooCommerce store owner, outdoor equipment</p>
             </div>
           </div>
         </section>
@@ -151,26 +139,12 @@ export default function EtsySellersPage() {
         {/* How it works */}
         <section className="border-t border-border py-20 px-6 bg-secondary/10">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight mb-10">
-              Shop-ready photos in three steps
-            </h2>
+            <h2 className="text-2xl font-bold tracking-tight mb-10">How it works for WooCommerce sellers</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {[
-                {
-                  step: '1',
-                  title: 'Upload your product shots',
-                  desc: 'Drop up to 500 photos at once — taken on any background, any lighting.',
-                },
-                {
-                  step: '2',
-                  title: 'AI removes backgrounds',
-                  desc: 'Clean white or transparent backgrounds in ~2 seconds per image. Works on jewelry, ceramics, prints, and more.',
-                },
-                {
-                  step: '3',
-                  title: 'Download and list',
-                  desc: 'All photos in a ZIP with original filenames preserved. Ready to upload straight to Etsy.',
-                },
+                { step: "1", title: "Export your product images", desc: "Export photos from your WordPress Media Library. Drop up to 500 at once into Backdrop." },
+                { step: "2", title: "AI removes backgrounds in bulk", desc: "White, transparent, or any custom color. Clean edges on all product types in ~2 seconds each." },
+                { step: "3", title: "Re-upload to WordPress", desc: "Download the ZIP — original filenames preserved. Drag into Media Library and swap product images." },
               ].map((item) => (
                 <div key={item.step} className="rounded-xl border border-border bg-card p-6">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-sm font-bold text-secondary-foreground mb-4 mx-auto">
@@ -187,9 +161,7 @@ export default function EtsySellersPage() {
         {/* FAQ */}
         <section className="border-t border-border py-20 px-6">
           <div className="mx-auto max-w-2xl">
-            <h2 className="text-2xl font-bold tracking-tight text-center mb-10">
-              Frequently asked questions
-            </h2>
+            <h2 className="text-2xl font-bold tracking-tight text-center mb-10">Frequently asked questions</h2>
             <div className="space-y-6">
               {FAQS.map((faq) => (
                 <div key={faq.q} className="rounded-xl border border-border bg-card p-6">
@@ -205,7 +177,7 @@ export default function EtsySellersPage() {
         <section className="border-t border-border py-24 px-6 text-center">
           <div className="mx-auto max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
-              Give your Etsy shop a professional edge
+              Give your WooCommerce catalog a consistent, professional look
             </h2>
             <p className="text-muted-foreground text-lg mb-10">
               5 free images every month. No credit card required. Upgrade when you&apos;re ready.
@@ -214,7 +186,7 @@ export default function EtsySellersPage() {
               href="/sign-up"
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-10 py-4 text-base font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Remove Backgrounds Free
+              Start Free — 5 Images/Month, No Credit Card
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
@@ -233,10 +205,8 @@ export default function EtsySellersPage() {
           <span>© {new Date().getFullYear()} Backdrop. All rights reserved.</span>
           <div className="flex gap-6">
             <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
-            <Link href="/amazon-fba" className="hover:text-foreground transition-colors">Amazon FBA</Link>
-            <Link href="/ebay-sellers" className="hover:text-foreground transition-colors">eBay</Link>
             <Link href="/shopify-sellers" className="hover:text-foreground transition-colors">Shopify</Link>
-            <Link href="/poshmark" className="hover:text-foreground transition-colors">Poshmark</Link>
+            <Link href="/amazon-fba" className="hover:text-foreground transition-colors">Amazon FBA</Link>
             <Link href="/#pricing" className="hover:text-foreground transition-colors">Pricing</Link>
           </div>
         </div>

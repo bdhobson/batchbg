@@ -3,57 +3,54 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle, Star } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Background Remover for Etsy Sellers — Bulk Clean Product Photos',
-  description:
-    'Make your Etsy listings stand out. Remove backgrounds from product photos in bulk — clean white or transparent results in seconds. No Photoshop, no per-image fees. 5 free images to start.',
+  title: "Background Remover for Shopify Stores — Bulk Product Photo Editor",
+  description: "Clean, professional product photos are the #1 conversion factor in Shopify stores. Backdrop removes backgrounds from your entire catalog in minutes — flat pricing, no subscriptions.",
   alternates: {
-    canonical: 'https://backdropimage.com/etsy-sellers',
+    canonical: "https://backdropimage.com/shopify-sellers",
   },
   openGraph: {
-    title: 'Background Remover for Etsy Sellers — Bulk Clean Product Photos',
-    description:
-      'Make your Etsy listings stand out. Remove backgrounds from product photos in bulk — clean white or transparent results in seconds.',
-    url: 'https://backdropimage.com/etsy-sellers',
-    siteName: 'Backdrop',
-    type: 'website',
-    locale: 'en_US',
+    title: "Background Remover for Shopify Stores — Bulk Product Photo Editor",
+    description: "Clean product photos drive Shopify sales. Remove backgrounds from your entire catalog in minutes — flat pricing, no per-image fees.",
+    url: "https://backdropimage.com/shopify-sellers",
+    siteName: "Backdrop",
+    type: "website",
+    locale: "en_US",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Background Remover for Etsy Sellers — Bulk Clean Product Photos',
-    description:
-      'Remove backgrounds from all your Etsy listing photos at once. 5 free images to start.',
+    card: "summary_large_image",
+    title: "Background Remover for Shopify Stores — Bulk Product Photo Editor",
+    description: "Clean product photos drive Shopify sales. Bulk background removal — flat pricing, no per-image fees.",
   },
 };
 
 const BULLETS = [
-  'Batch process your entire Etsy shop at once',
-  'White or transparent PNG backgrounds',
-  'Works on jewelry, candles, art prints, ceramics — any product',
-  'Download ZIP with original filenames preserved',
-  'Flat monthly pricing — no per-image fees',
+  "White, transparent, or custom color backgrounds",
+  "Process 500+ product images in one batch",
+  "~2 seconds per image with AI",
+  "Download ZIP with original filenames — re-upload ready",
+  "Flat monthly pricing — unlimited is actually unlimited",
 ];
 
 const FAQS = [
   {
-    q: 'What types of Etsy products work best?',
-    a: "Backdrop works great on jewelry, handmade goods, candles, art prints, ceramics, and most physical products. It handles complex shapes and fine details — things like necklace chains, mug handles, and textured surfaces all come out cleanly.",
+    q: "What background color should Shopify product photos have?",
+    a: "It depends on your theme, but pure white (#FFFFFF) or transparent PNG backgrounds give you the most flexibility. White backgrounds make products pop on any page layout; transparent PNGs work perfectly when your theme has a colored or textured background.",
   },
   {
-    q: 'Should I use white or transparent backgrounds on Etsy?',
-    a: "Both work. Transparent PNG lets you place your product on any background later — great for mockups or lifestyle-style listings. White backgrounds give a clean, consistent look that many top Etsy sellers prefer. Backdrop lets you choose either (or a custom color).",
+    q: "How many images can I process at once?",
+    a: "Up to 500 images per batch. If your catalog has thousands of SKUs, just run multiple batches — Backdrop keeps your job history so you can track what's been processed.",
   },
   {
-    q: 'How many photos can I process at once?',
-    a: 'Up to 500 images per batch. Monthly plans start at 1,000 images/month, so you can process your full shop inventory in multiple batches in a single session.',
+    q: "Will the edges look clean on clothing and complex products?",
+    a: "Backdrop uses the same AI model trusted by Amazon and eBay sellers for apparel, accessories, electronics, and furniture. Soft edges on hair, fur, and fabric come out clean without manual masking.",
   },
   {
-    q: 'Will it damage image quality?',
-    a: "No. Your images are processed at full resolution and output as PNG — a lossless format. The only thing that changes is the background; the product itself is untouched.",
+    q: "Do I need a Shopify subscription?",
+    a: "No — Backdrop is a standalone tool. Download your processed images and upload them directly to your Shopify product listings via the Shopify admin. No app required.",
   },
 ];
 
-export default function EtsySellersPage() {
+export default function ShopifySellersPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -66,16 +63,10 @@ export default function EtsySellersPage() {
             <span className="text-lg font-semibold tracking-tight">Backdrop</span>
           </Link>
           <div className="flex items-center gap-4">
-            <Link
-              href="/#pricing"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link href="/#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Pricing
             </Link>
-            <Link
-              href="/sign-in"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link href="/sign-in" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Sign in
             </Link>
             <Link
@@ -92,23 +83,21 @@ export default function EtsySellersPage() {
         {/* Hero */}
         <section className="mx-auto max-w-4xl px-6 pt-16 pb-20 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/30 px-4 py-1.5 text-sm text-muted-foreground mb-6">
-            <span>🛒</span>
-            <span>Built for Etsy sellers</span>
+            <span>🛍️</span>
+            <span>Built for Shopify store owners</span>
           </div>
           <h1 className="text-4xl font-bold tracking-tight leading-tight sm:text-5xl md:text-6xl mb-6">
-            Bulk Background Remover
-            <br />
-            <span className="text-muted-foreground">for Etsy Sellers</span>
+            Shopify Product Photos —<br />
+            <span className="text-muted-foreground">Professional Backgrounds at Scale</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Clean product photos get more clicks and convert better. Remove backgrounds from your
-            entire Etsy shop in minutes — not an afternoon in Photoshop.
+            Product photos with clean backgrounds convert 30% better than cluttered ones. Stop editing one image at a time. Backdrop processes your entire catalog in minutes, not days.
           </p>
           <Link
             href="/sign-up"
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
           >
-            Try Free — 5 Images/Month
+            Start Free — 5 Images/Month, No Credit Card
             <ArrowRight className="h-5 w-5" />
           </Link>
         </section>
@@ -117,7 +106,7 @@ export default function EtsySellersPage() {
         <section className="border-t border-border py-20 px-6 bg-secondary/10">
           <div className="mx-auto max-w-3xl">
             <h2 className="text-2xl font-bold tracking-tight text-center mb-10">
-              Everything Etsy sellers need for professional photos
+              Everything Shopify store owners need for great product photos
             </h2>
             <ul className="space-y-4 max-w-xl mx-auto">
               {BULLETS.map((b) => (
@@ -140,10 +129,9 @@ export default function EtsySellersPage() {
                 ))}
               </div>
               <p className="text-xl text-foreground leading-relaxed mb-4">
-                &ldquo;I run an Etsy jewelry shop. Used to spend hours in Photoshop every time I listed new
-                pieces. Now I drop everything in and it&apos;s done in two minutes.&rdquo;
+                &ldquo;I launched a new Shopify store with 300 SKUs. Getting professional-looking photos used to be the biggest bottleneck. Backdrop removed that problem completely.&rdquo;
               </p>
-              <p className="text-sm text-muted-foreground">— Etsy jewelry seller</p>
+              <p className="text-sm text-muted-foreground">— Shopify store owner, home goods niche</p>
             </div>
           </div>
         </section>
@@ -151,26 +139,12 @@ export default function EtsySellersPage() {
         {/* How it works */}
         <section className="border-t border-border py-20 px-6 bg-secondary/10">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight mb-10">
-              Shop-ready photos in three steps
-            </h2>
+            <h2 className="text-2xl font-bold tracking-tight mb-10">Three steps to catalog-ready product photos</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {[
-                {
-                  step: '1',
-                  title: 'Upload your product shots',
-                  desc: 'Drop up to 500 photos at once — taken on any background, any lighting.',
-                },
-                {
-                  step: '2',
-                  title: 'AI removes backgrounds',
-                  desc: 'Clean white or transparent backgrounds in ~2 seconds per image. Works on jewelry, ceramics, prints, and more.',
-                },
-                {
-                  step: '3',
-                  title: 'Download and list',
-                  desc: 'All photos in a ZIP with original filenames preserved. Ready to upload straight to Etsy.',
-                },
+                { step: "1", title: "Upload your product photos", desc: "Drop up to 500 JPG, PNG, or WEBP images in one batch. Mix sizes and orientations — Backdrop handles it." },
+                { step: "2", title: "AI removes backgrounds", desc: "Choose white, transparent, or a custom color. Processed in ~2 seconds per image with clean edges on clothing, accessories, and more." },
+                { step: "3", title: "Download & upload to Shopify", desc: "Get a single ZIP with original filenames. Upload directly to Shopify products — no renaming needed." },
               ].map((item) => (
                 <div key={item.step} className="rounded-xl border border-border bg-card p-6">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-sm font-bold text-secondary-foreground mb-4 mx-auto">
@@ -184,12 +158,35 @@ export default function EtsySellersPage() {
           </div>
         </section>
 
-        {/* FAQ */}
+        {/* Use cases */}
         <section className="border-t border-border py-20 px-6">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-center mb-10">Works for every Shopify niche</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[
+                { icon: "👗", title: "Fashion & Apparel", desc: "Clean white or transparent backgrounds for clothing and accessories. Soft edges on fabric come out crisp." },
+                { icon: "🏠", title: "Home & Furniture", desc: "Lifestyle shots converted to catalog-ready white-background product images." },
+                { icon: "💄", title: "Beauty & Cosmetics", desc: "Bottle and packaging shots with pure white backgrounds — meets beauty retailer standards." },
+                { icon: "🎮", title: "Electronics & Gadgets", desc: "Precise cutouts around cables, ports, and complex shapes without manual masking." },
+                { icon: "🐾", title: "Pet Products", desc: "Toys, beds, and accessories processed in bulk — great for high-SKU pet stores." },
+                { icon: "🎨", title: "Art & Handmade", desc: "Etsy-to-Shopify sellers batch process handmade items without expensive photo retouching." },
+              ].map((uc) => (
+                <div key={uc.title} className="rounded-xl border border-border bg-card p-5 flex gap-4">
+                  <span className="text-2xl shrink-0">{uc.icon}</span>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">{uc.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{uc.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="border-t border-border py-20 px-6 bg-secondary/10">
           <div className="mx-auto max-w-2xl">
-            <h2 className="text-2xl font-bold tracking-tight text-center mb-10">
-              Frequently asked questions
-            </h2>
+            <h2 className="text-2xl font-bold tracking-tight text-center mb-10">Frequently asked questions</h2>
             <div className="space-y-6">
               {FAQS.map((faq) => (
                 <div key={faq.q} className="rounded-xl border border-border bg-card p-6">
@@ -205,7 +202,7 @@ export default function EtsySellersPage() {
         <section className="border-t border-border py-24 px-6 text-center">
           <div className="mx-auto max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
-              Give your Etsy shop a professional edge
+              Ready to level up your Shopify product photos?
             </h2>
             <p className="text-muted-foreground text-lg mb-10">
               5 free images every month. No credit card required. Upgrade when you&apos;re ready.
@@ -214,7 +211,7 @@ export default function EtsySellersPage() {
               href="/sign-up"
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-10 py-4 text-base font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Remove Backgrounds Free
+              Start Free — 5 Images/Month, No Credit Card
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
@@ -234,9 +231,7 @@ export default function EtsySellersPage() {
           <div className="flex gap-6">
             <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
             <Link href="/amazon-fba" className="hover:text-foreground transition-colors">Amazon FBA</Link>
-            <Link href="/ebay-sellers" className="hover:text-foreground transition-colors">eBay</Link>
-            <Link href="/shopify-sellers" className="hover:text-foreground transition-colors">Shopify</Link>
-            <Link href="/poshmark" className="hover:text-foreground transition-colors">Poshmark</Link>
+            <Link href="/etsy-sellers" className="hover:text-foreground transition-colors">Etsy</Link>
             <Link href="/#pricing" className="hover:text-foreground transition-colors">Pricing</Link>
           </div>
         </div>

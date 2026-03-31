@@ -203,7 +203,8 @@ export default function PoshmarkPage() {
           <div className="flex gap-6">
             <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
             <Link href="/amazon-fba" className="hover:text-foreground transition-colors">Amazon FBA</Link>
-            <Link href="/ebay-sellers" className="hover:text-foreground transition-colors">eBay Sellers</Link>
+            <Link href="/ebay-sellers" className="hover:text-foreground transition-colors">eBay</Link>
+            <Link href="/shopify-sellers" className="hover:text-foreground transition-colors">Shopify</Link>
             <Link href="/#pricing" className="hover:text-foreground transition-colors">Pricing</Link>
           </div>
         </div>

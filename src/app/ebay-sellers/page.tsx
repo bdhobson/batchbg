@@ -202,6 +202,7 @@ export default function EbayPage() {
           <div className="flex gap-6">
             <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
             <Link href="/amazon-fba" className="hover:text-foreground transition-colors">Amazon FBA</Link>
+            <Link href="/shopify-sellers" className="hover:text-foreground transition-colors">Shopify</Link>
             <Link href="/poshmark" className="hover:text-foreground transition-colors">Poshmark</Link>
             <Link href="/#pricing" className="hover:text-foreground transition-colors">Pricing</Link>
           </div>
