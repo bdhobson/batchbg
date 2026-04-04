@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getJob } from '@/lib/jobs';
+import { auth } from '@/lib/auth';
 import pool from '@/lib/db';
 
 export async function GET(
@@ -11,6 +12,20 @@ export async function GET(
   const job = await getJob(id);
   if (!job) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+
+  // Ownership check: verify the requesting user owns this job.
+  // Supports both authenticated (Clerk) users and anonymous session-token users.
+  const { userId } = await auth();
+  const sessionToken = req.cookies.get('batchbg_session')?.value;
+
+  const isOwner =
+    (userId && job.clerk_user_id === userId) ||
+    (sessionToken && job.session_token === sessionToken) ||
+    (!job.clerk_user_id && !job.session_token);
+
+  if (!isOwner) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
   const res = await pool.query(
