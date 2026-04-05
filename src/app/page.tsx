@@ -174,17 +174,23 @@ export default async function LandingPage() {
         {/* How it works */}
         <section className="border-t border-border py-20 px-6 bg-secondary/10">
           <div className="mx-auto max-w-4xl">
-            <h2 className="text-3xl font-bold tracking-tight text-center mb-12">How it works</h2>
-            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-              {FEATURES.map((f, i) => (
-                <div key={f.title} className="rounded-xl border border-border bg-card p-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-sm font-bold text-secondary-foreground mb-4">
-                    {i + 1}
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tight mb-3">How it works</h2>
+              <p className="text-muted-foreground text-lg">Three steps. Done in minutes.</p>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-3">
+              {FEATURES.map((f) => {
+                const Icon = f.icon;
+                return (
+                  <div key={f.title} className="rounded-xl border border-border bg-card p-8 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mx-auto mb-5">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-2">{f.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">{f.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
